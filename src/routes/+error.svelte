@@ -8,6 +8,6 @@
 	</header>
 	<blockquote>The page you are looking for cannot be found</blockquote>
 	<footer class="card-footer mt-4 p-0">
-		<a href="/">Return to homepage</a>
+		<a href={$page.url.origin}>Return to homepage</a>
 	</footer>
 </div>
