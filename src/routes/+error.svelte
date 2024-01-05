@@ -1,8 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { base } from '$app/paths';
+
+	const baseUrl = base || "/";
+
 	console.log('url:', $page.url);
-	console.log('base url:', base);
+	console.log('base url:', baseUrl);
 </script>
 
 <div class="card p-4">
@@ -11,6 +14,6 @@
 	</header>
 	<blockquote>The page you are looking for cannot be found</blockquote>
 	<footer class="card-footer mt-4 p-0">
-		<a href="/{base}">Return to homepage</a>
+		<a href={baseUrl}>Return to homepage</a>
 	</footer>
 </div>
