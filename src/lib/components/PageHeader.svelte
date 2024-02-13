@@ -3,10 +3,10 @@
 	let str = 'hover:underline underline-offset-8';
 </script>
 
-<nav class="flex-none flex items-center space-x-2">
+<nav class="flex items-center space-x-2">
 	<a
 		class="{currentUrl === '/'
-			? 'variant-ghost-primary'
+			? 'font-bold'
 			: ''} btn btn-sm hover:variant-soft-primary"
 		aria-current={currentUrl === '/' ? 'page' : undefined}
 		href="/"
@@ -15,7 +15,7 @@
 	</a>
 	<a
 		class="{currentUrl === '/transport'
-			? 'variant-ghost-primary'
+			? 'font-bold'
 			: ''} btn btn-sm hover:variant-soft-primary"
 		aria-current={currentUrl === '/transport' ? 'page' : undefined}
 		href="/transport"
@@ -24,7 +24,7 @@
 	</a>
 	<a
 		class="{currentUrl === '/contact'
-			? 'variant-ghost-primary'
+			? 'font-bold'
 			: ''} btn btn-sm hover:variant-soft-primary"
 		aria-current={currentUrl === '/contact' ? 'page' : undefined}
 		href="/contact"
