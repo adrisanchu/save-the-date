@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import '../app.postcss';
 	import { AppBar } from '@skeletonlabs/skeleton';
+	import HeroIcon from '$lib/components/HeroIcon.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 
 	// Floating UI for Popups
@@ -11,7 +12,7 @@
 </script>
 
 <AppBar background="bg-surface-500 bg-opacity-20" class="fixed top-0 z-10 min-w-full">
-	<svelte:fragment slot="lead">A & I</svelte:fragment>
+	<svelte:fragment slot="lead"><HeroIcon currentUrl={$page.url.pathname}/></svelte:fragment>
 	<svelte:fragment slot="trail">
 		<PageHeader currentUrl={$page.url.pathname} />
 	</svelte:fragment>
