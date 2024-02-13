@@ -10,7 +10,7 @@
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 </script>
 
-<AppBar background="bg-opacity-75" class="fixed top-0 z-10 container">
+<AppBar background="bg-surface-500 bg-opacity-20" class="fixed top-0 z-10 min-w-full">
 	<svelte:fragment slot="lead">A & I</svelte:fragment>
 	<svelte:fragment slot="trail">
 		<PageHeader currentUrl={$page.url.pathname} />
