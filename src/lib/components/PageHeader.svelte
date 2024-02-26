@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	export let currentUrl: string = '/';
 	let underlinedStyle: string = 'underline underline-offset-8';
 </script>
@@ -9,17 +10,17 @@
 			? `font-bold ${underlinedStyle}`
 			: ''} btn btn-sm hover:variant-soft-primary"
 		aria-current={currentUrl === '/transport' ? 'page' : undefined}
-		href="/transport"
+		href="{base}/transport"
 	>
 		Transporte
 	</a>
-	<a
+	<!-- <a
 		class="{currentUrl === '/contact'
 			? `font-bold ${underlinedStyle}`
 			: ''} btn btn-sm hover:variant-soft-primary"
 		aria-current={currentUrl === '/contact' ? 'page' : undefined}
-		href="/contact"
+		href="{base}/contact"
 	>
 		Contacto
-	</a>
+	</a> -->
 </nav>
