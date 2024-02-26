@@ -1,16 +1,16 @@
-<div id="main" class="flex flex-col justify-center items-center">
+<!-- <div id="main" class="flex flex-col justify-center items-center">
+	<h1 class="h1 title">Save the date!</h1>
+	<h2 class="h2 title">Adri & Isa</h2>
+	<p>07.12.2024</p>
+</div> -->
+
+<div id="main" class="img-0 flex flex-col justify-center items-center text-surface-500">
 	<h1 class="h1 title">Save the date!</h1>
 	<h2 class="h2 title">Adri & Isa</h2>
 	<p>07.12.2024</p>
 </div>
 
-<div id="main" class="img-0 flex flex-col justify-center items-center">
-	<h1 class="h1 title">Save the date!</h1>
-	<h2 class="h2 title">Adri & Isa</h2>
-	<p>07.12.2024</p>
-</div>
-
-<div id="main" class="img-2 flex flex-col justify-center items-center">
+<!-- <div id="main" class="img-2 flex flex-col justify-center items-center">
 	<h1 class="h1 title">Save the date!</h1>
 	<h2 class="h2 title">Adri & Isa</h2>
 	<p>07.12.2024</p>
@@ -26,7 +26,7 @@
 	<h1 class="h1 title">Save the date!</h1>
 	<h2 class="h2 title">Adri & Isa</h2>
 	<p>07.12.2024</p>
-</div>
+</div> -->
 
 <style>
 	.title {
