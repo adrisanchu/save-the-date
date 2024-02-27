@@ -5,7 +5,7 @@
 
 <nav class="flex items-center space-x-2">
 	<a
-		class="{currentUrl.startsWith('/transport')
+		class="{currentUrl.includes('/transport')
 			? 'variant-filled'
 			: ''} btn btn-sm hover:variant-filled"
 		aria-current={currentUrl.startsWith('/transport') ? 'page' : undefined}
