@@ -1,24 +1,23 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	export let currentUrl: string = '/';
-	let underlinedStyle: string = 'underline underline-offset-8';
 </script>
 
 <nav class="flex items-center space-x-2">
 	<a
-		class="{currentUrl === '/transport'
-			? `font-bold ${underlinedStyle}`
-			: ''} btn btn-sm hover:variant-soft-primary"
-		aria-current={currentUrl === '/transport' ? 'page' : undefined}
+		class="{currentUrl.startsWith('/transport')
+			? 'variant-filled'
+			: ''} btn btn-sm hover:variant-filled"
+		aria-current={currentUrl.startsWith('/transport') ? 'page' : undefined}
 		href="{base}/transport"
 	>
 		Transporte
 	</a>
 	<!-- <a
-		class="{currentUrl === '/contact'
-			? `font-bold ${underlinedStyle}`
-			: ''} btn btn-sm hover:variant-soft-primary"
-		aria-current={currentUrl === '/contact' ? 'page' : undefined}
+		class="{currentUrl.startsWith('/contact')
+			? 'variant-filled'
+			: ''} btn btn-sm hover:variant-filled"
+		aria-current={currentUrl.startsWith('/contact') ? 'page' : undefined}
 		href="{base}/contact"
 	>
 		Contacto
