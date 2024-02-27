@@ -8,18 +8,18 @@
 		class="{currentUrl.includes('/transport')
 			? 'variant-filled'
 			: ''} btn btn-sm hover:variant-filled"
-		aria-current={currentUrl.startsWith('/transport') ? 'page' : undefined}
+		aria-current={currentUrl.includes('/transport') ? 'page' : undefined}
 		href="{base}/transport"
 	>
 		Transporte
 	</a>
-	<!-- <a
-		class="{currentUrl.startsWith('/contact')
+	<a
+		class="{currentUrl.includes('/contact')
 			? 'variant-filled'
 			: ''} btn btn-sm hover:variant-filled"
-		aria-current={currentUrl.startsWith('/contact') ? 'page' : undefined}
+		aria-current={currentUrl.includes('/contact') ? 'page' : undefined}
 		href="{base}/contact"
 	>
 		Contacto
-	</a> -->
+	</a>
 </nav>

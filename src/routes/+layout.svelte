@@ -5,7 +5,6 @@
 	import HeroIcon from '$lib/components/HeroIcon.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 
-	$: console.log('Base path: ', process.env.BASE_PATH);
 	$: console.log(`You're visiting: `, { path: $page.url.pathname, url: $page.url });
 
 	// Floating UI for Popups
