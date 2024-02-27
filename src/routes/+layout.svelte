@@ -5,6 +5,20 @@
 	import HeroIcon from '$lib/components/HeroIcon.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 
+	import { onNavigate } from '$app/navigation';
+
+	// smooth navigation using the ViewTransitionAPI
+	onNavigate((navigation) => {
+		if (!document.startViewTransition) return;
+
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
+	});
+
 	$: console.log(`You're visiting: `, { path: $page.url.pathname, url: $page.url });
 
 	// Floating UI for Popups

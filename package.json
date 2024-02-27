@@ -39,6 +39,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@floating-ui/dom": "1.5.3"
+		"@floating-ui/dom": "1.5.3",
+		"@types/dom-view-transitions": "^1.0.4"
 	}
 }
