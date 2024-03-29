@@ -5,6 +5,15 @@
 
 <nav class="flex items-center space-x-2">
 	<a
+		class="{currentUrl.includes('/agenda')
+			? 'variant-filled'
+			: ''} btn btn-sm hover:variant-filled"
+		aria-current={currentUrl.includes('/agenda') ? 'page' : undefined}
+		href="{base}/agenda"
+	>
+		Agenda
+	</a>
+	<a
 		class="{currentUrl.includes('/transport')
 			? 'variant-filled'
 			: ''} btn btn-sm hover:variant-filled"

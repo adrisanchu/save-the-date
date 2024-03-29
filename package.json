@@ -40,6 +40,7 @@
 	"type": "module",
 	"dependencies": {
 		"@floating-ui/dom": "1.5.3",
-		"@types/dom-view-transitions": "^1.0.4"
+		"@types/dom-view-transitions": "^1.0.4",
+		"svelte-vertical-timeline": "^1.0.0"
 	}
 }
