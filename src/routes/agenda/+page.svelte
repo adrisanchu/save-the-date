@@ -16,7 +16,7 @@
 	const agendaOptions: TimelineItem[] = [
 		{ title: 'Llegada a la Iglesia', time: '12:15 pm' },
 		{ title: 'Inicio de la Ceremonia', time: '12:30 pm' },
-		{ title: '¡Sí Quiero! 💍', time: '01:15 pm' },
+		{ title: '¡Sí Quiero! 💍', time: '01:00 pm' },
 		{ title: 'Recepción a Can Ribas', time: '02:30 pm' },
 		{ title: 'Comida', time: '03:30 pm' },
 		{ title: '¡Que comience la Fiesta! 💃🕺', time: '07:00 pm' },

@@ -14,13 +14,13 @@
 		Agenda
 	</a>
 	<a
-		class="{currentUrl.includes('/transport')
+		class="{currentUrl.includes('/info')
 			? 'variant-filled'
 			: ''} btn btn-sm hover:variant-filled"
-		aria-current={currentUrl.includes('/transport') ? 'page' : undefined}
-		href="{base}/transport"
+		aria-current={currentUrl.includes('/info') ? 'page' : undefined}
+		href="{base}/info"
 	>
-		Transporte
+		Información
 	</a>
 	<a
 		class="{currentUrl.includes('/contact')
