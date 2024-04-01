@@ -7,9 +7,9 @@
 </script>
 
 <section class="my-3 space-y-2">
-	<h4 class="badge variant-filled text-base cursor-pointer">
+	<h4 class="btn variant-filled">
 		{#if link}
-			<a class="" href={link} target="_blank" rel="noopener noreferrer">{title}</a>
+			<a href={link} target="_blank" rel="noopener noreferrer">{title}</a>
 		{:else}
 			{title}
 		{/if}
