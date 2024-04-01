@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
 	import HotelCard from '$lib/components/HotelCard.svelte';
 
 	type HotelInfo = {
@@ -105,9 +106,73 @@
 </script>
 
 <div class="flex flex-col">
-	<h2 id="transport" class="ml-6 h2 pt-20 mb-4">Transporte</h2>
+	<h2 id="hotels" class="ml-6 h2 pt-20 mb-4">Alojamiento</h2>
+	<div class="flex justify-center items-center flex-wrap">
+		<div class="container card p-4 mx-4 mb-2">
+			<Accordion>
+				<AccordionItem>
+					<svelte:fragment slot="summary"
+						><p>Hoteles que hemos contactado, con descuento:</p></svelte:fragment
+					>
+					<svelte:fragment slot="content"
+						>{#each hotels as { title, link, address, addressLink, additionalInfo }, i (title)}
+							<HotelCard {title} {link} {address} {addressLink} {additionalInfo}></HotelCard>
+							{#if i !== hotels.length - 1}
+								<hr class="!border-t-2" />
+							{/if}
+						{/each}</svelte:fragment
+					>
+				</AccordionItem>
+			</Accordion>
+		</div>
+		<div class="container card p-4 mx-4 my-2">
+			<Accordion>
+				<AccordionItem>
+					<svelte:fragment slot="summary"
+						><p>Hoteles próximos a la zona, sin descuento:</p></svelte:fragment
+					>
+					<svelte:fragment slot="content"
+						>{#each hotelsWithNoDiscount as { title, link, address, addressLink, additionalInfo }, i (title)}
+							<HotelCard {title} {link} {address} {addressLink} {additionalInfo}></HotelCard>
+							{#if i !== hotelsWithNoDiscount.length - 1}
+								<hr class="!border-t-2" />
+							{/if}
+						{/each}</svelte:fragment
+					>
+				</AccordionItem>
+			</Accordion>
+		</div>
+
+		<div class="container card p-4 mx-4 my-2">
+			<Accordion>
+				<AccordionItem>
+					<svelte:fragment slot="summary">
+						<p>Otros hoteles en Barcelona:</p></svelte:fragment
+					>
+					<svelte:fragment slot="content">
+						{#each otherHotels as { title, link, address, addressLink, additionalInfo }, i (title)}
+							<HotelCard {title} {link} {address} {addressLink} {additionalInfo}></HotelCard>
+							{#if i !== otherHotels.length - 1}
+								<hr class="!border-t-2" />
+							{/if}
+						{/each}</svelte:fragment
+					>
+				</AccordionItem>
+			</Accordion>
+		</div>
+		<div class="container card p-4 mx-4 mt-2 w-full" style="height: 80vh;">
+			<iframe
+				title="map"
+				class="h-full w-full"
+				src="https://www.google.com/maps/d/embed?mid=1hmmqatsugJSA89OARtd5P0sOqWevQBM&ehbc=2E312F&noprof=1"
+				style="border: 0;"
+				allow="fullscreen"
+			/>
+		</div>
+	</div>
+	<h2 id="transport" class="ml-6 h2 pt-5 mb-4">Transporte</h2>
 	<div class="flex justify-center items-center">
-		<div class="container card p-4 mx-4">
+		<div class="container card p-4 mx-4 mb-4">
 			<p>Se contará con servicio de autobuses:</p>
 			<ul class="list mt-4">
 				<li>
@@ -123,36 +188,6 @@
 					</span>
 				</li>
 			</ul>
-		</div>
-	</div>
-	<h2 id="hotels" class="ml-6 h2 pt-5 mb-4">Hoteles</h2>
-	<div class="flex justify-center items-center flex-wrap">
-		<div class="container card p-4 mx-4 mb-4">
-			<p>Hoteles que hemos contactado, con descuento:</p>
-			{#each hotels as { title, link, address, addressLink, additionalInfo }, i (title)}
-				<HotelCard {title} {link} {address} {addressLink} {additionalInfo}></HotelCard>
-				{#if i !== hotels.length - 1}
-					<hr class="!border-t-2" />
-				{/if}
-			{/each}
-		</div>
-		<div class="container card p-4 mx-4 my-4">
-			<p>Hoteles próximos a la zona, sin descuento:</p>
-			{#each hotelsWithNoDiscount as { title, link, address, addressLink, additionalInfo }, i (title)}
-				<HotelCard {title} {link} {address} {addressLink} {additionalInfo}></HotelCard>
-				{#if i !== hotelsWithNoDiscount.length - 1}
-					<hr class="!border-t-2" />
-				{/if}
-			{/each}
-		</div>
-		<div class="container card p-4 mx-4 my-4">
-			<p>Otros hoteles en Barcelona:</p>
-			{#each otherHotels as { title, link, address, addressLink, additionalInfo }, i (title)}
-				<HotelCard {title} {link} {address} {addressLink} {additionalInfo}></HotelCard>
-				{#if i !== otherHotels.length - 1}
-					<hr class="!border-t-2" />
-				{/if}
-			{/each}
 		</div>
 	</div>
 </div>
