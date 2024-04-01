@@ -27,7 +27,7 @@
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 </script>
 
-<AppBar background="bg-surface-500 bg-opacity-20" class="fixed top-0 z-10 min-w-full">
+<AppBar background="bg-surface-500 bg-opacity-20 backdrop-blur-sm" class="fixed top-0 z-10 min-w-full">
 	<svelte:fragment slot="lead"><HeroIcon currentUrl={$page.url.pathname} /></svelte:fragment>
 	<svelte:fragment slot="trail">
 		<PageHeader currentUrl={$page.url.pathname} />
