@@ -27,8 +27,8 @@
 
 <div class="flex flex-col">
 	<h2 id="agenda" class="ml-6 h2 pt-20 mb-4">Agenda</h2>
-	<div class="flex justify-center items-center">
-		<div class="container card p-4 mx-4">
+	<div class="flex justify-center items-center flex-wrap">
+		<div class="container card p-4 mx-4 mb-2">
 			<Timeline position="alternate" style={'padding: 0;'}>
 				{#each agendaOptions as option}
 					<TimelineItem style={'min-height: 50px;'}>
@@ -45,6 +45,61 @@
 					</TimelineItem>
 				{/each}
 			</Timeline>
+		</div>
+
+		<div class="container mx-4 my-2 grid grid-cols-1 md:grid-cols-2 md:gap-4">
+			<div class="card p-4 my-2 col-span-1 flex flex-col">
+				<header class="card-header py-2"><h3 class="h3 text-center">Ceremonia</h3></header>
+				<hr class="!border-t-2" />
+				<section class="p-4 mb-auto text-center">
+					<img alt="Bonanova" src="/img/bonanova-1.jpg" class="w-full mb-2 flex flex-col justify-center items-center" />
+					<a
+						class="h5"
+						href="https://maps.app.goo.gl/Xfb4t6fvaBdq7QZk8"
+						target="_blank"
+						rel="noopener noreferrer"
+						>Iglesia de los Santos Gervasio y Protasio y Nuestra Señora de la Bonanova</a
+					>
+				</section>
+				<hr class="!border-t-2" />
+				<footer class="card-footer py-2 flex items-center justify-between">
+					<p>
+						Pl. de la Bonanova, 12 <br />
+						Sarrià-Sant Gervasi <br />
+						08022 Barcelona
+					</p>
+					<a
+						class="anchor"
+						href="https://maps.app.goo.gl/Xfb4t6fvaBdq7QZk8"
+						target="_blank"
+						rel="noopener noreferrer">Cómo llegar</a
+					>
+				</footer>
+			</div>
+			<div class="card p-4 my-2 col-span-1 flex flex-col">
+				<header class="card-header py-2"><h3 class="h3 text-center">Banquete</h3></header>
+				<hr class="!border-t-2" />
+				<section class="p-4 mb-auto text-center">
+					<img alt="Can Ribas" src="/img/can-ribas-3.jpg" class="w-full mb-2 flex flex-col justify-center items-center" />
+					<a class="h5" href="https://canribas.com/" target="_blank" rel="noopener noreferrer"
+						>Can Ribas de Montbui</a
+					>
+				</section>
+				<hr class="!border-t-2" />
+				<footer class="card-footer py-2 flex items-center justify-between">
+					<p>
+						Camí de Can Ribas, s/n <br />
+						Bigues i Riells <br />
+						08415 Barcelona
+					</p>
+					<a
+						class="anchor"
+						href="https://maps.app.goo.gl/KEpiT85bE9R8wWLG7"
+						target="_blank"
+						rel="noopener noreferrer">Cómo llegar</a
+					>
+				</footer>
+			</div>
 		</div>
 	</div>
 </div>
