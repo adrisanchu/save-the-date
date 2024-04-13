@@ -52,7 +52,7 @@
 				<header class="card-header py-2"><h3 class="h3 text-center">Ceremonia</h3></header>
 				<hr class="!border-t-2" />
 				<section class="p-4 mb-auto text-center">
-					<img alt="Bonanova" src="/img/bonanova-1.jpg" class="w-full mb-2 flex flex-col justify-center items-center" />
+					<img alt="Bonanova" src="/img/bonanova.jpg" class="w-full mb-2 flex flex-col justify-center items-center" />
 					<a
 						class="h5"
 						href="https://maps.app.goo.gl/Xfb4t6fvaBdq7QZk8"
@@ -80,7 +80,7 @@
 				<header class="card-header py-2"><h3 class="h3 text-center">Banquete</h3></header>
 				<hr class="!border-t-2" />
 				<section class="p-4 mb-auto text-center">
-					<img alt="Can Ribas" src="/img/can-ribas-3.jpg" class="w-full mb-2 flex flex-col justify-center items-center" />
+					<img alt="Can Ribas" src="/img/can-ribas.jpg" class="w-full mb-2 flex flex-col justify-center items-center" />
 					<a class="h5" href="https://canribas.com/" target="_blank" rel="noopener noreferrer"
 						>Can Ribas de Montbui</a
 					>
