@@ -31,14 +31,20 @@
 	<div class="flex justify-center items-center flex-wrap">
 		<div class="container card p-4 mx-4 mb-2">
 			<Timeline position="alternate" style={'padding: 0;'}>
-				{#each agendaOptions as option}
-					<TimelineItem style={'min-height: 50px;'}>
+				{#each agendaOptions as option, i}
+					<TimelineItem
+						style={`${i === 0 ? '' : 'margin-top: -13.5px; '} ${
+							i !== agendaOptions.length - 1 ? 'min-height: 70px;' : 'min-height: 50px;'
+						}`}
+					>
 						<TimelineOppositeContent slot="opposite-content">
-							<p class="text-xs mt-1 mx-1">{option.time}</p>
+							<p class="text-xs mt-1 mx-1 text-gray-500">{option.time}</p>
 						</TimelineOppositeContent>
-						<TimelineSeparator>
-							<TimelineDot />
-							<TimelineConnector style={'background-color: bg-primary-900;'} />
+						<TimelineSeparator style={'padding-top: 13.5px;'}>
+							<TimelineDot
+								style={'background-color: #716947; margin-top: 0px; margin-bottom: 0px; display: flex; justify-content: center; border-color: transparent;'}
+							/>
+							<TimelineConnector style={'background-color: #716947'} />
 						</TimelineSeparator>
 						<TimelineContent>
 							<h3 class="mx-1">{option.title}</h3>
@@ -53,7 +59,11 @@
 				<header class="card-header py-2"><h3 class="h3 text-center">Ceremonia</h3></header>
 				<hr class="!border-t-2" />
 				<section class="p-4 mb-auto text-center">
-					<img alt="Bonanova" src="{base}/img/bonanova.jpg" class="w-full mb-2 flex flex-col justify-center items-center" />
+					<img
+						alt="Bonanova"
+						src="{base}/img/bonanova.jpg"
+						class="w-full mb-2 flex flex-col justify-center items-center"
+					/>
 					<a
 						class="h5"
 						href="https://maps.app.goo.gl/Xfb4t6fvaBdq7QZk8"
@@ -81,7 +91,11 @@
 				<header class="card-header py-2"><h3 class="h3 text-center">Banquete</h3></header>
 				<hr class="!border-t-2" />
 				<section class="p-4 mb-auto text-center">
-					<img alt="Can Ribas" src="{base}/img/can-ribas.jpg" class="w-full mb-2 flex flex-col justify-center items-center" />
+					<img
+						alt="Can Ribas"
+						src="{base}/img/can-ribas.jpg"
+						class="w-full mb-2 flex flex-col justify-center items-center"
+					/>
 					<a class="h5" href="https://canribas.com/" target="_blank" rel="noopener noreferrer"
 						>Can Ribas de Montbui</a
 					>
