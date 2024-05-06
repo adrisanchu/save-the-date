@@ -1,4 +1,7 @@
 <script lang="ts">
+	import db from '$lib/db/firebase';
+	import { collection, addDoc } from 'firebase/firestore';
+
 	let form: any = {
 		missing: false
 	};
@@ -8,12 +11,25 @@
 		form.name = data.get('name');
 		form.surname = data.get('surname');
 		form.email = data.get('email');
+		// console.log('data:', { name: form.name, surname: form.surname, email: form.email });
 
-		console.log('data:', { name: form.name, surname: form.surname, email: form.email });
 		// check for mandatory props
 		if (!form.name || !form.surname) {
 			console.error('Missing fields!');
 			form.missing = true;
+			return;
+		}
+
+		// Store into DB
+		try {
+			const docRef = await addDoc(collection(db, 'surveys'), {
+				name: form.name,
+				surname: form.surname,
+				email: form.email
+			});
+			console.log('Document written with ID: ', docRef.id);
+		} catch (e) {
+			console.error('Error adding document: ', e);
 		}
 	}
 </script>

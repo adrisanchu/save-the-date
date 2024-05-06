@@ -4,6 +4,11 @@ If you know what I mean...
 
 This project was created with Sveltekit and Skeleton UI.
 
+## Stack
+
+- The frontend is deployed on `GitHub Pages` as a static site, using the `node adapter-static`.
+- The backend uses `Firebase`. The config keys can be found [here](https://console.firebase.google.com/project/save-the-date-071224/overview).
+
 # create-svelte
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
