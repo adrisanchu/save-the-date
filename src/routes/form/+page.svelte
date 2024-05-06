@@ -1,6 +1,6 @@
 <script lang="ts">
 	import db from '$lib/db/firebase';
-	import { collection, addDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+	import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 	let form: any = {
 		missing: false
@@ -58,12 +58,11 @@
 
 		// Store into DB
 		try {
-			const docRef = await addDoc(collection(db, 'surveys'), surveyDoc);
-			console.log('Document written with ID: ', docRef.id);
-			// Update the timestamp field with the value from the server
-			await updateDoc(docRef, {
+			const docRef = await addDoc(collection(db, 'surveys'), {
+				...surveyDoc,
 				createdAt: serverTimestamp()
 			});
+			console.log('Document written with ID: ', docRef.id);
 		} catch (e) {
 			console.error('Error adding document: ', e);
 		}
