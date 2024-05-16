@@ -15,7 +15,8 @@ Tareas:
   - [x] Setup con Firebase
   - [x] Añadir listado de acompañantes (varios para familias?)
   - [x] Añadir confirmación bus ida, vuelta o ambos
-  - [ ] Avanzado: on:click => loading... y al acabar, sacar pop-up de confirmación!
+  - [x] Avanzado: on:click => loading...
+  - [ ] Al acabar submit, sacar pop-up de confirmación!
 
 - [ ] Repensar navegación a single page? estilo la de Vantage?
       (seguramente haya que insertar un e.preventDefault para evitar añadir los # a la url...)

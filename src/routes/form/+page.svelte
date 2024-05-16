@@ -1,15 +1,20 @@
 <script lang="ts">
+	import { ProgressRadial } from '@skeletonlabs/skeleton';
 	import BoolSelector from '$lib/components/BoolSelector.svelte';
 	import InviteCard from '$lib/components/InviteCard.svelte';
 	import type { Survey, Allergy, Invite } from '$lib/types';
 	import db from '$lib/db/firebase';
 	import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+	import { Confetti } from 'svelte-confetti';
 
 	let form: any = {
-		missing: false
+		missing: false,
+		loading: false,
+		success: true
 	};
 
 	async function handleSubmit(event: { currentTarget: EventTarget & HTMLFormElement }) {
+		form.loading = true;
 		const data = new FormData(event.currentTarget);
 		form.name = data.get('name');
 		form.surname = data.get('surname');
@@ -20,6 +25,7 @@
 		if (!form.name || !form.surname) {
 			console.error('Missing fields!');
 			form.missing = true;
+			form.loading = false;
 			return;
 		}
 
@@ -27,6 +33,7 @@
 		if (invites.length > 0 && invites.some((invite) => !invite.name)) {
 			console.error('Missing invite names!');
 			form.missing = true;
+			form.loading = false;
 			return;
 		}
 
@@ -60,16 +67,18 @@
 		console.log('survey doc:', surveyDoc);
 
 		// Store into DB
-
 		try {
 			const docRef = await addDoc(collection(db, 'surveys'), {
 				...surveyDoc,
 				createdAt: serverTimestamp()
 			});
 			console.log('Document written with ID: ', docRef.id);
+			// show some confetti when form is submitted
+			form.success = true;
 		} catch (e) {
 			console.error('Error adding document: ', e);
 		}
+		form.loading = false;
 	}
 
 	let assistance: boolean = false;
@@ -134,6 +143,37 @@
 	}
 </script>
 
+{#if form.success}
+	<div class="flex justify-center items-center fixed top-0 w-screen h-screen">
+		<Confetti
+			noGravity
+			amount={300}
+			x={[-1, 1]}
+			y={[-1, 1]}
+			delay={[0, 50]}
+			duration={1000}
+			colorRange={[0, 120]}
+		/>
+		<Confetti
+			noGravity
+			amount={400}
+			x={[-1, 1]}
+			y={[-1, 1]}
+			delay={[550, 550]}
+			duration={1000}
+			colorRange={[120, 240]}
+		/>
+		<Confetti
+			noGravity
+			amount={500}
+			x={[-1, 1]}
+			y={[-1, 1]}
+			delay={[1000, 1050]}
+			duration={1000}
+			colorRange={[240, 360]}
+		/>
+	</div>
+{/if}
 <div class="flex flex-col">
 	<h2 id="agenda" class="ml-6 h2 pt-20 mb-4">Confirmación de asistencia</h2>
 	<div class="flex justify-center items-center flex-wrap">
@@ -282,7 +322,13 @@
 				</div>
 			{/if}
 			<div class="pt-4 flex justify-end">
-				<button class="btn variant-filled" type="submit">Enviar</button>
+				{#if form.loading}
+					<button disabled class="btn variant-filled" type="submit">
+						<ProgressRadial value={undefined} class="mr-2 w-4 h-4" />Enviar
+					</button>
+				{:else}
+					<button class="btn variant-filled" type="submit">Enviar</button>
+				{/if}
 			</div>
 		</form>
 	</div>
