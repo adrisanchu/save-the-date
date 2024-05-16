@@ -4,10 +4,4 @@
 	const baseUrl = base || '/';
 </script>
 
-<a
-	class="h5"
-	aria-current={currentUrl === '/' ? 'page' : undefined}
-	href="{baseUrl}"
->
-	A & I
-</a>
+<a class="h5" aria-current={currentUrl === '/' ? 'page' : undefined} href={baseUrl}> A & I </a>

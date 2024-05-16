@@ -1,18 +1,18 @@
 /* https://coolors.co/palette/606c38-283618-fefae0-dda15e-bc6c25 */
 /* https://coolors.co/palette/edede9-d6ccc2-f5ebe0-e3d5ca-d5bdaf */
 .colours-list {
-	background-color: #264653;	/* primary */
-	background-color: #2a9d8f;	/* secondary */
-	background-color: #d5bdaf;	/* tertiary */
+	background-color: #264653; /* primary */
+	background-color: #2a9d8f; /* secondary */
+	background-color: #d5bdaf; /* tertiary */
 	background-color: #f4f1de; /* surface */
 
 	background-color: #8ab17d; /* success */
 	background-color: #f4a261; /* warning */
 	background-color: #9e2a2b; /* error */
 
-	background-color: #006d77;	/* primary 2 */
-	background-color: #2a9d8f;	/* secondary 2 */
+	background-color: #006d77; /* primary 2 */
+	background-color: #2a9d8f; /* secondary 2 */
 	background-color: #fffff0; /* surface 2 */
-	
+
 	background-color: #fdfcdc; /* surface 3 */
 }

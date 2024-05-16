@@ -5,18 +5,14 @@
 
 <nav class="flex items-center space-x-2">
 	<a
-		class="{currentUrl.includes('/agenda')
-			? 'variant-filled'
-			: ''} btn btn-sm hover:variant-filled"
+		class="{currentUrl.includes('/agenda') ? 'variant-filled' : ''} btn btn-sm hover:variant-filled"
 		aria-current={currentUrl.includes('/agenda') ? 'page' : undefined}
 		href="{base}/agenda"
 	>
 		Agenda
 	</a>
 	<a
-		class="{currentUrl.includes('/info')
-			? 'variant-filled'
-			: ''} btn btn-sm hover:variant-filled"
+		class="{currentUrl.includes('/info') ? 'variant-filled' : ''} btn btn-sm hover:variant-filled"
 		aria-current={currentUrl.includes('/info') ? 'page' : undefined}
 		href="{base}/info"
 	>
