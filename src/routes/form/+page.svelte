@@ -1,19 +1,12 @@
 <script lang="ts">
+	import BoolSelector from '$lib/components/BoolSelector.svelte';
+	import InviteCard from '$lib/components/InviteCard.svelte';
+	import type { Survey, Allergy, Invite } from '$lib/types';
 	import db from '$lib/db/firebase';
 	import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 	let form: any = {
 		missing: false
-	};
-
-	type Survey = {
-		name: string;
-		surname: string;
-		email: string;
-		assistance: boolean;
-		allergies?: string[];
-		otherAllergies?: string;
-		invites?: Invite[];
 	};
 
 	async function handleSubmit(event: { currentTarget: EventTarget & HTMLFormElement }) {
@@ -31,8 +24,6 @@
 		}
 
 		// If invites...
-		console.log(invites);
-		console.log(invites.some((invite) => !invite.name));
 		if (invites.length > 0 && invites.some((invite) => !invite.name)) {
 			console.error('Missing invite names!');
 			form.missing = true;
@@ -61,16 +52,13 @@
 
 		// If other allergies...
 		if (allergiesStored.includes('other')) {
-			let otherAllergy: Allergy | undefined = allergies.filter(
-				(allergy: Allergy) => allergy.accessor === 'other'
-			)[0];
-			surveyDoc.otherAllergies = otherAllergy.value;
+			surveyDoc.otherAllergies = otherAllergies;
 		}
 
 		console.log('survey doc:', surveyDoc);
 
 		// Store into DB
-		/*
+
 		try {
 			const docRef = await addDoc(collection(db, 'surveys'), {
 				...surveyDoc,
@@ -80,17 +68,11 @@
 		} catch (e) {
 			console.error('Error adding document: ', e);
 		}
-		*/
 	}
 
-	let assistance: boolean = true;
+	let assistance: boolean = false;
 
-	type Allergy = {
-		accessor: string;
-		name: string;
-		checked: boolean;
-		value?: string;
-	};
+	let otherAllergies: string = '';
 
 	let allergies: Allergy[] = [
 		{
@@ -111,8 +93,7 @@
 		{
 			accessor: 'other',
 			name: 'Otros (especificar a continuación)',
-			checked: false,
-			value: ''
+			checked: false
 		}
 	];
 
@@ -124,13 +105,6 @@
 			return allergy;
 		});
 	}
-
-	type Invite = {
-		id: string;
-		type: string; // couple, child, other
-		age?: number; // for children
-		name: string;
-	};
 
 	let invites: Invite[] = [];
 
@@ -205,33 +179,14 @@
 				/>
 			</label>
 			<!-- confirm -->
-			<label for="confirm" class="label">
-				<span>¿Vas a venir a la boda?</span>
-				<div class="space-y-2">
-					<label class="flex items-center space-x-2">
-						<input
-							class="radio"
-							type="radio"
-							name="radio-direct"
-							value="true"
-							checked={assistance}
-							on:click={() => (assistance = true)}
-						/>
-						<p>Sí</p>
-					</label>
-					<label class="flex items-center space-x-2">
-						<input
-							class="radio"
-							type="radio"
-							name="radio-direct"
-							value="false"
-							checked={!assistance}
-							on:click={() => (assistance = false)}
-						/>
-						<p>No</p>
-					</label>
-				</div>
-			</label>
+			<BoolSelector
+				label={'¿Vas a venir a la boda?'}
+				bind:value={assistance}
+				yesLabel={'Sí'}
+				noLabel={'No'}
+				on:true={() => (assistance = true)}
+				on:false={() => (assistance = false)}
+			/>
 			{#if assistance}
 				<!-- +X -->
 				<label for="confirm" class="label">
@@ -245,51 +200,12 @@
 					</button>
 					<div class="space-y-2">
 						{#each invites as invite, idx (invite.id)}
-							<div class="card p-4">
-								<header class="flex items-center justify-between mb-2">
-									<span class="font-bold">Acompañante {idx + 1}:</span>
-									<button
-										type="button"
-										class="w-8 h-8 font-bold btn-icon btn-icon-sm variant-filled"
-										on:click={() => removeInvite(invite.id)}>X</button
-									>
-								</header>
-								<section class="max-w-lg">
-									<div class="flex space-x-2">
-										<select class="select" bind:value={invite.type}>
-											<option value="couple">Pareja</option>
-											<option value="child">Niño/a</option>
-											<option value="other">Otro</option>
-										</select>
-										{#if invite.type === 'child'}
-											<input
-												class="input w-24"
-												name="age"
-												type="number"
-												placeholder="Edad"
-												bind:value={invite.age}
-											/>
-										{:else}
-											<div class="w-36"></div>
-										{/if}
-									</div>
-									<!-- name -->
-									<label for="name" class="label">
-										<span>Nombre *</span>
-										<input
-											name="name"
-											class="input"
-											class:input-error={form?.missing && !invite.name}
-											type="text"
-											placeholder="Juan"
-											bind:value={invite.name}
-										/>
-										{#if form?.missing && !invite.name}
-											<p class="text-xs text-error-500">Nombre obligatorio</p>
-										{/if}
-									</label>
-								</section>
-							</div>
+							<InviteCard
+								num={idx + 1}
+								{invite}
+								missing={form?.missing}
+								on:remove={() => removeInvite(invite.id)}
+							/>
 						{/each}
 					</div>
 				</label>
@@ -313,7 +229,7 @@
 										class="textarea"
 										rows="4"
 										placeholder="Detalla otras alergias/intolerancias..."
-										bind:value={allergy.value}
+										bind:value={otherAllergies}
 									/>
 								</label>
 							{/if}
