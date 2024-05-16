@@ -10,7 +10,7 @@
 	let form: any = {
 		missing: false,
 		loading: false,
-		success: true
+		success: false
 	};
 
 	async function handleSubmit(event: { currentTarget: EventTarget & HTMLFormElement }) {
@@ -156,7 +156,7 @@
 		/>
 		<Confetti
 			noGravity
-			amount={400}
+			amount={500}
 			x={[-1, 1]}
 			y={[-1, 1]}
 			delay={[550, 550]}
@@ -165,7 +165,7 @@
 		/>
 		<Confetti
 			noGravity
-			amount={500}
+			amount={400}
 			x={[-1, 1]}
 			y={[-1, 1]}
 			delay={[1000, 1050]}
