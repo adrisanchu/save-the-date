@@ -11,32 +11,32 @@
 	export let noLabel: string = 'No';
 </script>
 
-<label for="confirm" class="label">
-	{#if label}
-		<span>{label}</span>
-	{/if}
-	<div class="flex space-x-4">
-		<label class="flex items-center space-x-2">
-			<input
-				class="radio"
-				type="radio"
-				{name}
-				value="true"
-				checked={value}
-				on:click={() => dispatch('true')}
-			/>
-			<p>{yesLabel}</p>
-		</label>
-		<label class="flex items-center space-x-2">
-			<input
-				class="radio"
-				type="radio"
-				{name}
-				value="false"
-				checked={!value}
-				on:click={() => dispatch('false')}
-			/>
-			<p>{noLabel}</p>
-		</label>
-	</div>
-</label>
+{#if label}
+	<span>{label}</span>
+{/if}
+<div class="flex space-x-4">
+	<label for="${name}_true" class="flex items-center space-x-2">
+		<input
+			id="${name}_true"
+			class="radio"
+			type="radio"
+			{name}
+			value="true"
+			checked={value}
+			on:click={() => dispatch('true')}
+		/>
+		<p>{yesLabel}</p>
+	</label>
+	<label for="${name}_false" class="flex items-center space-x-2">
+		<input
+			id="${name}_false"
+			class="radio"
+			type="radio"
+			{name}
+			value="false"
+			checked={!value}
+			on:click={() => dispatch('false')}
+		/>
+		<p>{noLabel}</p>
+	</label>
+</div>

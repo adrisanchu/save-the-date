@@ -19,6 +19,8 @@ export type Survey = {
 	surname: string;
 	email: string;
 	assistance: boolean;
+	busGo: boolean;
+	busReturn: boolean;
 	allergies?: string[]; // list of strings matching allergy accessors
 	otherAllergies?: string;
 	invites?: Invite[];

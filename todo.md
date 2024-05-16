@@ -13,8 +13,8 @@ Tareas:
 
   - [x] Básico: datos personales + alergias + asistencia...
   - [x] Setup con Firebase
-  - [ ] Añadir listado de acompañantes (varios para familias?)
-  - [ ] Añadir confirmación bus ida, vuelta o ambos
+  - [x] Añadir listado de acompañantes (varios para familias?)
+  - [x] Añadir confirmación bus ida, vuelta o ambos
   - [ ] Avanzado: on:click => loading... y al acabar, sacar pop-up de confirmación!
 
 - [ ] Repensar navegación a single page? estilo la de Vantage?

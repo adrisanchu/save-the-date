@@ -35,7 +35,9 @@
 			name: form.name,
 			surname: form.surname,
 			email: form.email,
-			assistance: assistance
+			assistance: assistance,
+			busGo: busGo,
+			busReturn: busReturn
 		};
 
 		// If invites...
@@ -71,6 +73,8 @@
 	}
 
 	let assistance: boolean = false;
+	let busGo: boolean = false;
+	let busReturn: boolean = false;
 
 	let otherAllergies: string = '';
 
@@ -138,12 +142,15 @@
 			on:submit|preventDefault={handleSubmit}
 			class="container card p-4 mx-4 mb-2 space-y-4"
 		>
+			<span>Datos personales:</span>
 			<!-- name -->
 			<label for="name" class="label">
 				<span>Nombre *</span>
 				<input
+					id="name"
 					name="name"
 					class="input"
+					autocomplete="given-name"
 					class:input-error={form?.missing && !form.name}
 					type="text"
 					placeholder="Juan"
@@ -154,11 +161,13 @@
 				{/if}
 			</label>
 			<!-- surname -->
-			<label for="name" class="label">
+			<label for="surname" class="label">
 				<span>Apellido/s *</span>
 				<input
+					id="surname"
 					name="surname"
 					class="input"
+					autocomplete="family-name"
 					class:input-error={form?.missing && !form.surname}
 					type="text"
 					placeholder="Cuesta"
@@ -171,6 +180,7 @@
 			<label for="email" class="label">
 				<span>Correo electrónico (opcional)</span>
 				<input
+					id="email"
 					class="input"
 					name="email"
 					type="email"
@@ -179,25 +189,30 @@
 				/>
 			</label>
 			<!-- confirm -->
-			<BoolSelector
-				label={'¿Vas a venir a la boda?'}
-				bind:value={assistance}
-				yesLabel={'Sí'}
-				noLabel={'No'}
-				on:true={() => (assistance = true)}
-				on:false={() => (assistance = false)}
-			/>
+			<div class="mt-4">
+				<BoolSelector
+					label={'¿Vas a venir a la boda?'}
+					bind:value={assistance}
+					yesLabel={'Sí'}
+					noLabel={'No'}
+					on:true={() => (assistance = true)}
+					on:false={() => (assistance = false)}
+				/>
+			</div>
+
 			{#if assistance}
 				<!-- +X -->
-				<label for="confirm" class="label">
-					<span>¿Con quién?</span>
-					<button
-						type="button"
-						class="ml-2 font-bold btn-icon btn-icon-sm variant-filled"
-						on:click={newInvite}
-					>
-						+
-					</button>
+				<div class="mt-4">
+					<div class="mb-2">
+						<span>¿Con quién?</span>
+						<button
+							type="button"
+							class="ml-2 font-bold btn-icon btn-icon-sm variant-filled"
+							on:click={newInvite}
+						>
+							+
+						</button>
+					</div>
 					<div class="space-y-2">
 						{#each invites as invite, idx (invite.id)}
 							<InviteCard
@@ -208,14 +223,15 @@
 							/>
 						{/each}
 					</div>
-				</label>
+				</div>
 				<!-- alergias ? -->
-				<label for="allergies" class="label">
+				<div class="mt-4">
 					<span>Alérgenos/Intolerancias</span>
 					<div class="space-y-2">
 						{#each allergies as allergy (allergy.accessor)}
-							<label class="flex items-center space-x-2">
+							<label for={allergy.accessor} class="flex items-center space-x-2">
 								<input
+									id={allergy.accessor}
 									class="checkbox"
 									type="checkbox"
 									checked={allergy.checked}
@@ -226,6 +242,7 @@
 							{#if allergy.accessor == 'other' && allergy.checked}
 								<label class="label">
 									<textarea
+										id="otherAllergies"
 										class="textarea"
 										rows="4"
 										placeholder="Detalla otras alergias/intolerancias..."
@@ -235,9 +252,35 @@
 							{/if}
 						{/each}
 					</div>
-				</label>
+				</div>
+				<!-- bus -->
+				<div class="mt-4">
+					<span>En cuanto al transporte...</span>
+					<div class="flex justify-start space-x-8">
+						<div class="flex flex-col items-center">
+							<BoolSelector
+								label={'¿Bus de ida?'}
+								bind:value={busGo}
+								yesLabel={'Sí'}
+								noLabel={'No'}
+								on:true={() => (busGo = true)}
+								on:false={() => (busGo = false)}
+							/>
+						</div>
+						<span class="divider-vertical h-16" />
+						<div class="flex flex-col items-center">
+							<BoolSelector
+								label={'¿Bus de vuelta?'}
+								bind:value={busReturn}
+								yesLabel={'Sí'}
+								noLabel={'No'}
+								on:true={() => (busReturn = true)}
+								on:false={() => (busReturn = false)}
+							/>
+						</div>
+					</div>
+				</div>
 			{/if}
-
 			<div class="pt-4 flex justify-end">
 				<button class="btn variant-filled" type="submit">Enviar</button>
 			</div>

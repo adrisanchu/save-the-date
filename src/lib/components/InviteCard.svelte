@@ -71,7 +71,7 @@
 	</header>
 	<section class="max-w-lg">
 		<div class="flex space-x-2">
-			<select class="select" bind:value={invite.type}>
+			<select id="${invite.id}_type" class="select" bind:value={invite.type}>
 				<option value="couple">Pareja</option>
 				<option value="child">Niño/a</option>
 				<option value="other">Otro</option>
@@ -89,11 +89,13 @@
 			{/if}
 		</div>
 		<!-- name -->
-		<label for="name" class="label">
+		<label for="${invite.id}_name" class="label">
 			<span>Nombre *</span>
 			<input
+				id="${invite.id}_name"
 				name="name"
 				class="input"
+				autocomplete="given-name"
 				class:input-error={missing && !invite.name}
 				type="text"
 				placeholder="Juan"
@@ -114,12 +116,13 @@
 		/>
 		{#if anyAllergies}
 			<!-- alergias -->
-			<label for="allergies" class="label">
+			<div class="mt-4">
 				<span>Alérgenos/Intolerancias</span>
 				<div class="space-y-2">
 					{#each allergies as allergy (allergy.accessor)}
-						<label class="flex items-center space-x-2">
+						<label for={invite.id + '_' + allergy.accessor} class="flex items-center space-x-2">
 							<input
+								id={invite.id + '_' + allergy.accessor}
 								class="checkbox"
 								type="checkbox"
 								checked={allergy.checked}
@@ -130,6 +133,7 @@
 						{#if allergy.accessor == 'other' && allergy.checked}
 							<label class="label">
 								<textarea
+									id={invite.id + '_' + 'otherAllergies'}
 									class="textarea"
 									rows="4"
 									placeholder="Detalla otras alergias/intolerancias..."
@@ -139,7 +143,7 @@
 						{/if}
 					{/each}
 				</div>
-			</label>
+			</div>
 		{/if}
 	</section>
 </div>
