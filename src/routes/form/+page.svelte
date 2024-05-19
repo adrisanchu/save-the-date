@@ -175,7 +175,7 @@
 	</div>
 {/if}
 <div class="flex flex-col">
-	<h2 id="agenda" class="ml-6 h2 pt-20 mb-4">Confirmación de asistencia</h2>
+	<h2 id="form" class="ml-6 h2 pt-20 mb-4">Confirmación de asistencia</h2>
 	<div class="flex justify-center items-center flex-wrap">
 		<form
 			method="POST"
