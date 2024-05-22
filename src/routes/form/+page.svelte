@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
+	import FullScreenConfetti from '$lib/components/FullScreenConfetti.svelte';
 	import BoolSelector from '$lib/components/BoolSelector.svelte';
 	import InviteCard from '$lib/components/InviteCard.svelte';
 	import type { Survey, Allergy, Invite } from '$lib/types';
 	import db from '$lib/db/firebase';
 	import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-	import { Confetti } from 'svelte-confetti';
 
 	let form: any = {
 		missing: false,
@@ -144,35 +144,7 @@
 </script>
 
 {#if form.success}
-	<div class="flex justify-center items-center fixed top-0 w-screen h-screen">
-		<Confetti
-			noGravity
-			amount={300}
-			x={[-1, 1]}
-			y={[-1, 1]}
-			delay={[0, 50]}
-			duration={1000}
-			colorRange={[0, 120]}
-		/>
-		<Confetti
-			noGravity
-			amount={500}
-			x={[-1, 1]}
-			y={[-1, 1]}
-			delay={[550, 550]}
-			duration={1000}
-			colorRange={[120, 240]}
-		/>
-		<Confetti
-			noGravity
-			amount={400}
-			x={[-1, 1]}
-			y={[-1, 1]}
-			delay={[1000, 1050]}
-			duration={1000}
-			colorRange={[240, 360]}
-		/>
-	</div>
+	<FullScreenConfetti />
 {/if}
 <div class="flex flex-col">
 	<h2 id="form" class="ml-6 h2 pt-20 mb-4">Confirmación de asistencia</h2>
