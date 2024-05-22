@@ -1,11 +1,52 @@
 <script lang="ts">
-	import { ProgressRadial } from '@skeletonlabs/skeleton';
 	import FullScreenConfetti from '$lib/components/FullScreenConfetti.svelte';
 	import BoolSelector from '$lib/components/BoolSelector.svelte';
 	import InviteCard from '$lib/components/InviteCard.svelte';
 	import type { Survey, Allergy, Invite } from '$lib/types';
 	import db from '$lib/db/firebase';
 	import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+	import { getModalStore, ProgressRadial } from '@skeletonlabs/skeleton';
+	import type { ModalSettings } from '@skeletonlabs/skeleton';
+
+	// handle modal pop-up
+	const modalStore = getModalStore();
+
+	/**
+	 * Display a modal after form submission
+	 * @param id
+	 */
+	function showConfirmationModal(id: string) {
+		const modal: ModalSettings = {
+			type: 'alert',
+			title: '¡Formulario recibido!',
+			body: `¡Pues ya estaría! <br />
+			De parte de Isa y Adri, muchas gracias por tu colaboración :) <br />
+			Si quieres cambiar el formulario en el futuro, guarda este código a buen recaudo! <br />
+			<div class="flex justify-center items-center">
+				<b>${id}</b>
+			</div>`
+		};
+		modalStore.trigger(modal);
+	}
+
+	/**
+	 * A function to test if the confetti and modal pop-up
+	 * are working as expected
+	 * @param id
+	 */
+	function fakeSubmit(id: string) {
+		form.success = true;
+
+		setTimeout(() => {
+			console.log('show modal...');
+			showConfirmationModal(id);
+		}, 2000);
+
+		setTimeout(() => {
+			console.log('re-enable fom (remove confetti!)');
+			form.success = false;
+		}, 2000);
+	}
 
 	let form: any = {
 		missing: false,
@@ -300,6 +341,12 @@
 					</button>
 				{:else}
 					<button class="btn variant-filled" type="submit">Enviar</button>
+					<!-- Test button to simulate pop-up -->
+					<button
+						class="ml-2 btn variant-filled"
+						type="button"
+						on:click={() => fakeSubmit('axjshf123')}>Pop-up</button
+					>
 				{/if}
 			</div>
 		</form>

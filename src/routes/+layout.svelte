@@ -25,7 +25,13 @@
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	import { storePopup } from '@skeletonlabs/skeleton';
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+
+	// Modals setup
+	import { initializeStores, Modal } from '@skeletonlabs/skeleton';
+	initializeStores();
 </script>
+
+<Modal />
 
 <AppBar
 	background="bg-surface-500 bg-opacity-20 backdrop-blur-sm"
