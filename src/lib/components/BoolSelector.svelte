@@ -9,6 +9,7 @@
 	export let label: string | undefined;
 	export let yesLabel: string = 'Yes';
 	export let noLabel: string = 'No';
+	export let disabled: boolean = false;
 </script>
 
 {#if label}
@@ -17,6 +18,7 @@
 <div class="flex space-x-4">
 	<label for="${name}_true" class="flex items-center space-x-2">
 		<input
+			{disabled}
 			id="${name}_true"
 			class="radio"
 			type="radio"
@@ -29,6 +31,7 @@
 	</label>
 	<label for="${name}_false" class="flex items-center space-x-2">
 		<input
+			{disabled}
 			id="${name}_false"
 			class="radio"
 			type="radio"
