@@ -12,6 +12,7 @@
 	const docRef = doc(db, 'surveys', $page.params.formId);
 
 	const getSurvey = async () => {
+		console.log('Loading...');
 		const docSnap = await getDoc(docRef);
 		console.log('doc: ', docSnap);
 
@@ -68,11 +69,7 @@
 				{#if survey.invites}
 					<div class="space-y-2">
 						{#each survey.invites as invite, idx (invite.id)}
-							<InviteCard
-								num={idx + 1}
-								{invite}
-                on:remove={() => {}}
-							/>
+							<InviteCard num={idx + 1} {invite} on:remove={() => {}} />
 						{/each}
 					</div>
 				{/if}
