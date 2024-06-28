@@ -1,23 +1,37 @@
 <script lang="ts">
-	let activeSearch: boolean = false;
+	import { goto } from '$app/navigation';
+	import db from '$lib/db/firebase';
+	import { doc, getDoc } from 'firebase/firestore';
+	import { base } from '$app/paths';
 
-	function newSurvey() {
-		console.log('new');
-	}
-	function findSurvey() {
-		console.log('find');
+	let searchCode: string = '';
+
+	/**
+	 * Find a survey based on the input field
+	 */
+	async function findSurvey() {
+		if (searchCode) {
+			// find the code on the server
+			const docRef = doc(db, 'surveys', searchCode);
+			const docSnap = await getDoc(docRef);
+			if (docSnap.exists()) {
+				// navigate to the page
+				goto(`${base}/form/${searchCode}`);
+			} else {
+				console.log('No such document!');
+				// display an error
+			}
+		}
 	}
 </script>
 
 <div class="flex flex-col">
 	<h2 id="form" class="ml-6 h2 pt-20 mb-4">Confirmación de asistencia</h2>
-	<div class="mx-auto flex flex-col space-y-2 justify-center">
-		<button type="button" class="ml-2 font-bold btn variant-filled" on:click={newSurvey}>
-			Nuevo Formulario
-		</button>
+	<div class="mx-auto flex flex-col space-y-6 justify-center">
+		<a class="ml-2 font-bold btn variant-filled" href="{base}/form/new">Nuevo Formulario</a>
 		<div class="separator"><span class="text-surface-900">O bien...</span></div>
 		<div class="flex">
-			<input type="text" class="input" />
+			<input type="text" class="input" placeholder="Código de formulario" bind:value={searchCode} />
 			<button type="button" class="ml-2 font-bold btn variant-filled" on:click={findSurvey}>
 				Buscar...
 			</button>
