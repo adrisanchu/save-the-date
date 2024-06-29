@@ -7,6 +7,7 @@
 	import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 	import { getModalStore, ProgressRadial } from '@skeletonlabs/skeleton';
 	import type { ModalSettings, ModalComponent, ModalStore } from '@skeletonlabs/skeleton';
+	import surveys from '$lib/stores/surveys';
 
 	// handle modal pop-up
 	const modalStore = getModalStore();
@@ -114,6 +115,9 @@
 				createdAt: serverTimestamp()
 			});
 			console.log('Document written with ID: ', docRef.id);
+
+			// store locally
+			surveys.set([surveyDoc, ...$surveys]);
 
 			// display confirmation message
 			showConfirmationModal(docRef.id);

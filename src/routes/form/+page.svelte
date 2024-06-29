@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import db from '$lib/db/firebase';
+	import surveys from '$lib/stores/surveys';
 	import { doc, getDoc } from 'firebase/firestore';
 	import { base } from '$app/paths';
 
@@ -36,6 +37,30 @@
 				Buscar...
 			</button>
 		</div>
+		{#if $surveys.length > 0}
+			<div class="container card p-4 my-2">
+				<p>Formularios completados previamente:</p>
+				{#each $surveys as survey, i (survey)}
+					<section class="my-2">
+						<div class="flex space-x-2">
+							<span>Nombre:</span>
+							<p class="text-surface-900 font-semibold">{survey.name} {survey.surname}</p>
+						</div>
+						<div class="flex space-x-2">
+							<span>Email:</span>
+							<p class="text-surface-900 font-semibold">{survey.email}</p>
+						</div>
+						<div class="flex space-x-2">
+							<span>Asistencia:</span>
+							<p class="text-surface-900 font-semibold">{survey.assistance ? 'Sí' : 'No'}</p>
+						</div>
+					</section>
+					{#if i !== $surveys.length - 1}
+						<hr class="!border-t-2" />
+					{/if}
+				{/each}
+			</div>
+		{/if}
 	</div>
 </div>
 
