@@ -1,32 +1,23 @@
-<!-- <div id="main" class="flex flex-col justify-center items-center">
-	<h1 class="h1 title">Save the date!</h1>
-	<h2 class="h2 title">Adri & Isa</h2>
-	<p>07.12.2024</p>
-</div> -->
+<script lang="ts">
+	import { fly } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
+	import { onMount } from 'svelte';
 
-<div id="main" class="img-0 flex flex-col justify-center items-center text-surface-500">
-	<h1 class="h1 title">Save the date!</h1>
-	<h2 class="h2 title">Adri & Isa</h2>
-	<p>07.12.2024</p>
-</div>
+	let ready = false;
+	onMount(() => (ready = true));
+</script>
 
-<!-- <div id="main" class="img-2 flex flex-col justify-center items-center">
-	<h1 class="h1 title">Save the date!</h1>
-	<h2 class="h2 title">Adri & Isa</h2>
-	<p>07.12.2024</p>
-</div>
-
-<div id="main" class="img-3 flex flex-col justify-center items-center">
-	<h1 class="h1 title">Save the date!</h1>
-	<h2 class="h2 title">Adri & Isa</h2>
-	<p>07.12.2024</p>
-</div>
-
-<div id="main" class="img-4 flex flex-col justify-center items-center">
-	<h1 class="h1 title">Save the date!</h1>
-	<h2 class="h2 title">Adri & Isa</h2>
-	<p>07.12.2024</p>
-</div> -->
+<div id="main" class="img-0"></div>
+{#if ready}
+	<div
+		class="fixed top-20 right-10 text-surface-500 flex flex-col items-center"
+		in:fly|global={{ delay: 600, duration: 1500, easing: quintOut, x: 100 }}
+	>
+		<h1 class="h1 title">Save the date!</h1>
+		<h2 class="h2 title">Adri & Isa</h2>
+		<p>07.12.2024</p>
+	</div>
+{/if}
 
 <style>
 	.title {
@@ -45,17 +36,5 @@
 	.img-0 {
 		background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
 			url('/img/img_0.jpeg');
-	}
-	.img-2 {
-		background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-			url('/img/img_2.jpeg');
-	}
-	.img-3 {
-		background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-			url('/img/img_3.jpeg');
-	}
-	.img-4 {
-		background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-			url('/img/img_4.jpeg');
 	}
 </style>
