@@ -19,7 +19,8 @@
 			additionalInfo: [
 				'El descuento es del 10% sobre el precio de la habitación en el momento de hacer la reserva.',
 				'El pago se haría en el Hotel a la llegada y se podría cancelar sin gastos hasta 48 horas antes.',
-				'<em>(código de descuento disponible próximamente)</em>'
+				'Código de descuento: <b>ISABEL&ADRIAN</b>',
+				'Se aplica automáticamente con el siguiente <a class="anchor" href="https://www.cataloniahotels.com/es/content/boda-isabel-y-adrian" target="_blank" rel="noopener noreferrer">enlace</a>'
 			]
 		},
 		{
