@@ -106,6 +106,13 @@
 	];
 </script>
 
+<head>
+	<meta
+		name="description"
+		content="Information about the hotels and the transport options on the wedding day"
+	/>
+</head>
+
 <div class="flex flex-col">
 	<h2 id="hotels" class="ml-6 h2 pt-20 mb-4">Alojamiento</h2>
 	<div class="flex justify-center items-center flex-wrap">

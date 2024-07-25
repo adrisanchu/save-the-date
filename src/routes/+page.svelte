@@ -7,6 +7,10 @@
 	onMount(() => (ready = true));
 </script>
 
+<head>
+	<meta name="description" content="Save the Date! Adri & Isa are getting married the 07/12/2024" />
+</head>
+
 <div id="main" class="img-0"></div>
 {#if ready}
 	<div

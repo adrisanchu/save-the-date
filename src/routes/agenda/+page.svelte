@@ -26,6 +26,13 @@
 	];
 </script>
 
+<head>
+	<meta
+		name="description"
+		content="Agenda for the wedding day, as well as the location of the important places"
+	/>
+</head>
+
 <div class="flex flex-col">
 	<h2 id="agenda" class="ml-6 h2 pt-20 mb-4">Agenda</h2>
 	<div class="flex justify-center items-center flex-wrap">
