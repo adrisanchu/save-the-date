@@ -2,9 +2,34 @@
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import { onMount } from 'svelte';
+	import { countdownTimer } from '$lib/utils';
 
-	let ready = false;
-	onMount(() => (ready = true));
+	// Animation controls
+	let ready: boolean = false;
+	const delay: number = 600;
+	const duration: number = 1500;
+
+	// Countdown initial setup
+	const weddingDate: Date = new Date('2024-12-07T12:30:00');
+
+	let countdown = {
+		months: '00',
+		days: '00',
+		hours: '00',
+		minutes: '00',
+		seconds: '00'
+	};
+
+	// Once the client is ready
+	onMount(() => {
+		ready = true;
+
+		// Update countdown every second
+		setInterval(() => {
+			let today: Date = new Date();
+			countdown = countdownTimer(today, weddingDate);
+		}, 1000);
+	});
 </script>
 
 <head>
@@ -15,11 +40,49 @@
 {#if ready}
 	<div
 		class="fixed top-20 right-10 text-surface-500 flex flex-col items-center"
-		in:fly|global={{ delay: 600, duration: 1500, easing: quintOut, x: 100 }}
+		in:fly|global={{ delay: delay, duration: duration, easing: quintOut, x: 100 }}
 	>
 		<h1 class="h1 title">Save the date!</h1>
 		<h2 class="h2 title">Adri & Isa</h2>
 		<p>07.12.2024</p>
+	</div>
+
+	<div
+		class="fixed bottom-4 w-screen text-surface-500 flex flex-col items-center"
+		in:fly|global={{ delay: delay * 2, duration: duration, easing: quintOut, y: 100 }}
+	>
+		<div class="columns-5 gap-2 text-center">
+			<div
+				class="card p-1 flex flex-col items-center bg-surface-500 bg-opacity-20 backdrop-blur-sm"
+			>
+				<span class="date-num text-2xl">{countdown.months}</span>
+				<span class="text-xs">Meses</span>
+			</div>
+			<div
+				class="card p-1 flex flex-col items-center bg-surface-500 bg-opacity-20 backdrop-blur-sm"
+			>
+				<span class="date-num text-2xl">{countdown.days}</span>
+				<span class="text-xs">Días</span>
+			</div>
+			<div
+				class="card p-1 flex flex-col items-center bg-surface-500 bg-opacity-20 backdrop-blur-sm"
+			>
+				<span class="date-num text-2xl">{countdown.hours}</span>
+				<span class="text-xs">Horas</span>
+			</div>
+			<div
+				class="card p-1 flex flex-col items-center bg-surface-500 bg-opacity-20 backdrop-blur-sm"
+			>
+				<span class="date-num text-2xl">{countdown.minutes}</span>
+				<span class="text-xs">Minutos</span>
+			</div>
+			<div
+				class="card p-1 flex flex-col items-center bg-surface-500 bg-opacity-20 backdrop-blur-sm"
+			>
+				<span class="date-num text-2xl">{countdown.seconds}</span>
+				<span class="text-xs">Segundos</span>
+			</div>
+		</div>
 	</div>
 {/if}
 
