@@ -180,7 +180,7 @@
 	</div>
 	<h2 id="transport" class="ml-6 h2 pt-5 mb-4">Transporte</h2>
 	<div class="flex justify-center items-center">
-		<div class="container card p-4 mx-4 mb-4">
+		<div class="container card p-4 mx-4 mb-2">
 			<p>Se contará con servicio de autobuses:</p>
 			<ul class="list mt-4">
 				<li>
@@ -196,6 +196,21 @@
 					</span>
 				</li>
 			</ul>
+		</div>
+	</div>
+	<h2 id="other" class="ml-6 h2 pt-5 mb-4">Otra información de interés</h2>
+	<div class="flex justify-center items-center">
+		<div class="container card p-4 mx-4 mb-4">
+			<h3 id="hairdresser" class="h3 pt-2 mb-2">Peluquerías</h3>
+			<div class="w-full" style="height: 80vh;">
+				<iframe
+				title="map"
+				class="h-full w-full"
+				src="https://www.google.com/maps/d/embed?mid=1cXSt5uCS5fZBfbnxTkx-b6cDCeAQmnY&ehbc=2E312F"
+				style="border: 0;"
+				allow="fullscreen"
+			/>
+			</div>
 		</div>
 	</div>
 </div>
