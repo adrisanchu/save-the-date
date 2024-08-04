@@ -7,7 +7,7 @@
 </script>
 
 <section class="my-3 space-y-2">
-	<h4 class="btn variant-filled">
+	<h4 class="variant-filled btn">
 		{#if link}
 			<a href={link} target="_blank" rel="noopener noreferrer">{title}</a>
 		{:else}
@@ -15,7 +15,7 @@
 		{/if}
 	</h4>
 	{#if address}
-		<div class="text-sm flex flex-col space-y-1">
+		<div class="flex flex-col space-y-1 text-sm">
 			<span class="mb-1">
 				{#if addressLink}
 					<a class="anchor" href={addressLink} target="_blank" rel="noopener noreferrer"

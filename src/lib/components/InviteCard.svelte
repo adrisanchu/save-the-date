@@ -61,11 +61,11 @@
 </script>
 
 <div class="card p-4">
-	<header class="flex items-center justify-between mb-2">
+	<header class="mb-2 flex items-center justify-between">
 		<span class="font-bold">Acompañante {num}:</span>
 		<button
 			type="button"
-			class="w-8 h-8 font-bold btn-icon btn-icon-sm variant-filled"
+			class="variant-filled btn-icon btn-icon-sm h-8 w-8 font-bold"
 			on:click={() => dispatch('remove', { id: invite.id })}>X</button
 		>
 	</header>
