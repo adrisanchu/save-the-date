@@ -19,7 +19,7 @@
 			additionalInfo: [
 				'El descuento es del 10% sobre el precio de la habitación en el momento de hacer la reserva.',
 				'El pago se haría en el Hotel a la llegada y se podría cancelar sin gastos hasta 48 horas antes.',
-				'Código de descuento: <b>ISABEL&ADRIAN</b>',
+				'Código de descuento: <b>BODAISABELADRIAN</b>',
 				'Se aplica automáticamente con el siguiente <a class="anchor" href="https://www.cataloniahotels.com/es/content/boda-isabel-y-adrian" target="_blank" rel="noopener noreferrer">enlace</a>'
 			]
 		},
@@ -30,7 +30,7 @@
 			addressLink:
 				'https://www.google.com/maps/place/Hotel+Catalonia+Barcelona+505/@41.4032776,2.1346616,17z/data=!3m1!5s0x12a4980d1a89cd2f:0x4feb58d51986db3f!4m11!3m10!1s0x12a4980d04dda15b:0xe4d04b1750a256!5m4!1s2024-07-02!2i2!4m1!1i2!8m2!3d41.4032776!4d2.1372365!16s%2Fg%2F11cs4h1z9b?hl=es&entry=tts',
 			additionalInfo: [
-				'Código de descuento: <b>ISABEL&ADRIAN</b>',
+				'Código de descuento: <b>BODAISABELADRIAN</b>',
 				'Se aplica automáticamente con el siguiente <a class="anchor" href="https://www.cataloniahotels.com/es/content/boda-isabel-y-adrian" target="_blank" rel="noopener noreferrer">enlace</a>'
 			]
 		},
