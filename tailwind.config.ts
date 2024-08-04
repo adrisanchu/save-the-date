@@ -27,11 +27,7 @@ export default {
 						enhancements: true
 					}
 				],
-				custom: [
-					theme_v1,
-					theme_v2,
-					theme_v3
-				]
+				custom: [theme_v1, theme_v2, theme_v3]
 			}
 		})
 	]

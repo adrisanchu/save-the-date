@@ -8,9 +8,9 @@
 	console.log('base url:', baseUrl);
 </script>
 
-<div class="flex flex-col justify-center items-center min-h-screen">
-	<div class="card p-4 mx-4">
-		<header class="card-header text-center mb-4 p-0">
+<div class="flex min-h-screen flex-col items-center justify-center">
+	<div class="card mx-4 p-4">
+		<header class="card-header mb-4 p-0 text-center">
 			<h2>{$page.status}: {$page.error?.message}</h2>
 		</header>
 		<blockquote>The page you are looking for cannot be found</blockquote>

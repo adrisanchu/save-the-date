@@ -19,7 +19,8 @@
 			additionalInfo: [
 				'El descuento es del 10% sobre el precio de la habitación en el momento de hacer la reserva.',
 				'El pago se haría en el Hotel a la llegada y se podría cancelar sin gastos hasta 48 horas antes.',
-				'<em>(código de descuento disponible próximamente)</em>'
+				'Código de descuento: <b>ISABEL&ADRIAN</b>',
+				'Se aplica automáticamente con el siguiente <a class="anchor" href="https://www.cataloniahotels.com/es/content/boda-isabel-y-adrian" target="_blank" rel="noopener noreferrer">enlace</a>'
 			]
 		},
 		{
@@ -105,10 +106,17 @@
 	];
 </script>
 
+<head>
+	<meta
+		name="description"
+		content="Information about the hotels and the transport options on the wedding day"
+	/>
+</head>
+
 <div class="flex flex-col">
-	<h2 id="hotels" class="ml-6 h2 pt-20 mb-4">Alojamiento</h2>
-	<div class="flex justify-center items-center flex-wrap">
-		<div class="container card p-4 mx-4 mb-2">
+	<h2 id="hotels" class="h2 mb-4 ml-6 pt-20">Alojamiento</h2>
+	<div class="flex flex-wrap items-center justify-center">
+		<div class="card container mx-4 mb-2 p-4">
 			<Accordion>
 				<AccordionItem>
 					<svelte:fragment slot="summary"
@@ -125,7 +133,7 @@
 				</AccordionItem>
 			</Accordion>
 		</div>
-		<div class="container card p-4 mx-4 my-2">
+		<div class="card container mx-4 my-2 p-4">
 			<Accordion>
 				<AccordionItem>
 					<svelte:fragment slot="summary"
@@ -143,7 +151,7 @@
 			</Accordion>
 		</div>
 
-		<div class="container card p-4 mx-4 my-2">
+		<div class="card container mx-4 my-2 p-4">
 			<Accordion>
 				<AccordionItem>
 					<svelte:fragment slot="summary">
@@ -160,7 +168,7 @@
 				</AccordionItem>
 			</Accordion>
 		</div>
-		<div class="container card p-4 mx-4 mt-2 w-full" style="height: 80vh;">
+		<div class="card container mx-4 mt-2 w-full p-4" style="height: 80vh;">
 			<iframe
 				title="map"
 				class="h-full w-full"
@@ -170,24 +178,39 @@
 			/>
 		</div>
 	</div>
-	<h2 id="transport" class="ml-6 h2 pt-5 mb-4">Transporte</h2>
-	<div class="flex justify-center items-center">
-		<div class="container card p-4 mx-4 mb-4">
+	<h2 id="transport" class="h2 mb-4 ml-6 pt-5">Transporte</h2>
+	<div class="flex items-center justify-center">
+		<div class="card container mx-4 mb-2 p-4">
 			<p>Se contará con servicio de autobuses:</p>
 			<ul class="list mt-4">
 				<li>
-					<span class="badge variant-filled">13:30</span>
+					<span class="variant-filled badge">13:30</span>
 					<span class="flex-auto">
 						Autobús de ida desde la Iglesia hasta Can Ribas al acabar la ceremonia
 					</span>
 				</li>
 				<li>
-					<span class="badge variant-filled">00:15</span>
+					<span class="variant-filled badge">00:15</span>
 					<span class="flex-auto">
 						Autobús de vuelta al acabar la fiesta de Can Ribas hasta Barcelona
 					</span>
 				</li>
 			</ul>
+		</div>
+	</div>
+	<h2 id="other" class="h2 mb-4 ml-6 pt-5">Otra información de interés</h2>
+	<div class="flex items-center justify-center">
+		<div class="card container mx-4 mb-4 p-4">
+			<h3 id="hairdresser" class="h3 mb-2 pt-2">Peluquerías</h3>
+			<div class="w-full" style="height: 80vh;">
+				<iframe
+					title="map"
+					class="h-full w-full"
+					src="https://www.google.com/maps/d/embed?mid=1cXSt5uCS5fZBfbnxTkx-b6cDCeAQmnY&ehbc=2E312F"
+					style="border: 0;"
+					allow="fullscreen"
+				/>
+			</div>
 		</div>
 	</div>
 </div>
