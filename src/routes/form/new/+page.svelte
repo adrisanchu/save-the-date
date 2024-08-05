@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { slide } from 'svelte/transition';
+	import { quintInOut } from 'svelte/easing';
 	import FullScreenConfetti from '$lib/components/FullScreenConfetti.svelte';
 	import BoolSelector from '$lib/components/BoolSelector.svelte';
 	import InviteCard from '$lib/components/InviteCard.svelte';
@@ -20,6 +22,7 @@
 		const modal: ModalSettings = {
 			type: 'alert',
 			title: '¡Formulario recibido!',
+			buttonTextCancel: '¡Entendido!',
 			body: `¡Pues ya estaría! <br />
 			De parte de Isa y Adri, muchas gracias por tu colaboración :) <br />
 			Si quieres cambiar el formulario en el futuro, guarda este código a buen recaudo! <br />
@@ -86,7 +89,8 @@
 			email: form.email,
 			assistance: assistance,
 			busGo: busGo,
-			busReturn: busReturn
+			busReturn: busReturn,
+			busReturnEarly: busReturnEarly
 		};
 
 		// If invites...
@@ -133,6 +137,7 @@
 	let assistance: boolean = false;
 	let busGo: boolean = false;
 	let busReturn: boolean = false;
+	let busReturnEarly: boolean = false;
 
 	let otherAllergies: string = '';
 
@@ -196,14 +201,14 @@
 	<FullScreenConfetti />
 {/if}
 <div class="flex flex-col">
-	<h2 id="form" class="ml-6 h2 pt-20 mb-4">Confirmación de asistencia</h2>
-	<div class="flex justify-center items-center flex-wrap">
+	<h2 id="form" class="h2 mb-4 ml-6 pt-20">Confirmación de asistencia</h2>
+	<div class="flex flex-wrap items-center justify-center">
 		<form
 			method="POST"
 			on:submit|preventDefault={handleSubmit}
-			class="container card p-4 mx-4 mb-2 space-y-4"
+			class="card container mx-4 mb-2 space-y-4 p-4"
 		>
-			<span>Datos personales:</span>
+			<h3 class="h3">Datos personales:</h3>
 			<!-- name -->
 			<label for="name" class="label">
 				<span>Nombre *</span>
@@ -262,96 +267,113 @@
 			</div>
 
 			{#if assistance}
-				<!-- +X -->
-				<div class="mt-4">
-					<div class="mb-2">
-						<span>¿Con quién?</span>
-						<button
-							type="button"
-							class="ml-2 font-bold btn-icon btn-icon-sm variant-filled"
-							on:click={newInvite}
-						>
-							+
-						</button>
-					</div>
-					<div class="space-y-2">
-						{#each invites as invite, idx (invite.id)}
-							<InviteCard
-								num={idx + 1}
-								{invite}
-								missing={form?.missing}
-								on:remove={() => removeInvite(invite.id)}
-							/>
-						{/each}
-					</div>
-				</div>
-				<!-- alergias ? -->
-				<div class="mt-4">
-					<span>Alérgenos/Intolerancias</span>
-					<div class="space-y-2">
-						{#each allergies as allergy (allergy.accessor)}
-							<label for={allergy.accessor} class="flex items-center space-x-2">
-								<input
-									id={allergy.accessor}
-									class="checkbox"
-									type="checkbox"
-									checked={allergy.checked}
-									on:click={() => handleAllergyCheck(allergy.accessor)}
-								/>
-								<p>{allergy.name}</p>
-							</label>
-							{#if allergy.accessor == 'other' && allergy.checked}
-								<label class="label">
-									<textarea
-										id="otherAllergies"
-										class="textarea"
-										rows="4"
-										placeholder="Detalla otras alergias/intolerancias..."
-										bind:value={otherAllergies}
+				<div class="mt-4" transition:slide|global={{ duration: 800, easing: quintInOut }}>
+					<!-- alergias ? -->
+					<div class="">
+						<h3 class="h3">Alérgenos/Intolerancias:</h3>
+						<div class="mt-2 space-y-2">
+							{#each allergies as allergy (allergy.accessor)}
+								<label for={allergy.accessor} class="flex items-center space-x-2">
+									<input
+										id={allergy.accessor}
+										class="checkbox"
+										type="checkbox"
+										checked={allergy.checked}
+										on:click={() => handleAllergyCheck(allergy.accessor)}
 									/>
+									<p>{allergy.name}</p>
 								</label>
-							{/if}
-						{/each}
-					</div>
-				</div>
-				<!-- bus -->
-				<div class="mt-4">
-					<span>En cuanto al transporte...</span>
-					<div class="flex justify-start space-x-8">
-						<div class="flex flex-col items-center">
-							<BoolSelector
-								label={'¿Bus de ida?'}
-								bind:value={busGo}
-								yesLabel={'Sí'}
-								noLabel={'No'}
-								on:true={() => (busGo = true)}
-								on:false={() => (busGo = false)}
-							/>
-						</div>
-						<span class="divider-vertical h-16" />
-						<div class="flex flex-col items-center">
-							<BoolSelector
-								label={'¿Bus de vuelta?'}
-								bind:value={busReturn}
-								yesLabel={'Sí'}
-								noLabel={'No'}
-								on:true={() => (busReturn = true)}
-								on:false={() => (busReturn = false)}
-							/>
+								{#if allergy.accessor == 'other' && allergy.checked}
+									<label class="label">
+										<textarea
+											id="otherAllergies"
+											class="textarea"
+											rows="4"
+											placeholder="Detalla otras alergias/intolerancias..."
+											bind:value={otherAllergies}
+										/>
+									</label>
+								{/if}
+							{/each}
 						</div>
 					</div>
+
+					<!-- +X -->
+					<div class="mt-4">
+						<div class="mb-2">
+							<span>¿Con quién?</span>
+							<button
+								type="button"
+								class="variant-filled btn-icon btn-icon-sm ml-2 font-bold"
+								on:click={newInvite}
+							>
+								+
+							</button>
+						</div>
+						<div class="space-y-2">
+							{#each invites as invite, idx (invite.id)}
+								<InviteCard
+									num={idx + 1}
+									{invite}
+									missing={form?.missing}
+									on:remove={() => removeInvite(invite.id)}
+								/>
+							{/each}
+						</div>
+					</div>
+
+					<!-- bus -->
+					<div class="mt-4">
+						<span>En cuanto al transporte...</span>
+						<div class="flex justify-start space-x-8">
+							<div class="flex flex-col items-center">
+								<BoolSelector
+									label={'¿Bus de ida?'}
+									bind:value={busGo}
+									yesLabel={'Sí'}
+									noLabel={'No'}
+									on:true={() => (busGo = true)}
+									on:false={() => (busGo = false)}
+								/>
+							</div>
+							<span class="divider-vertical h-16" />
+							<div class="flex flex-col items-center">
+								<BoolSelector
+									label={'¿Bus de vuelta?'}
+									bind:value={busReturn}
+									yesLabel={'Sí'}
+									noLabel={'No'}
+									on:true={() => (busReturn = true)}
+									on:false={() => (busReturn = false)}
+								/>
+							</div>
+						</div>
+					</div>
+
+					{#if busReturn}
+						<div class="flex flex-col items-center">
+							<BoolSelector
+								label={'Si pudieras elegir un bus de vuelta...'}
+								bind:value={busReturnEarly}
+								yesLabel={'Cogería el más temprano que haya (21:30)'}
+								noLabel={'¡El último que haya!'}
+								on:true={() => (busReturnEarly = true)}
+								on:false={() => (busReturnEarly = false)}
+							/>
+						</div>
+					{/if}
 				</div>
 			{/if}
-			<div class="pt-4 flex justify-end">
+			<div class="flex justify-end pt-4">
 				{#if form.loading}
-					<button disabled class="btn variant-filled" type="submit">
-						<ProgressRadial value={undefined} class="mr-2 w-4 h-4" />Enviar
+					<button disabled class="variant-filled btn" type="submit">
+						<ProgressRadial value={undefined} class="mr-2 h-4 w-4" />Enviar
 					</button>
 				{:else}
-					<button class="btn variant-filled" type="submit">Enviar</button>
+					<button class="variant-filled btn" type="submit">Enviar</button>
 					<!-- Test button to simulate pop-up -->
 					<button
-						class="ml-2 btn variant-filled"
+						class="variant-filled btn ml-2"
 						type="button"
 						on:click={() => fakeSubmit('axjshf123')}>Pop-up</button
 					>

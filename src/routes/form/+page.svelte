@@ -27,32 +27,35 @@
 </script>
 
 <div class="flex flex-col">
-	<h2 id="form" class="ml-6 h2 pt-20 mb-4">Confirmación de asistencia</h2>
-	<div class="mx-auto flex flex-col space-y-6 justify-center">
-		<a class="ml-2 font-bold btn variant-filled" href="{base}/form/new">Nuevo Formulario</a>
+	<h2 id="form" class="h2 mb-4 ml-6 pt-20">Confirmación de asistencia</h2>
+	<div class="mx-4 flex flex-col justify-center space-y-6 md:mx-auto">
+		<a class="variant-filled btn ml-2 font-bold" href="{base}/form/new">Nuevo Formulario</a>
 		<div class="separator"><span class="text-surface-900">O bien...</span></div>
-		<div class="flex">
-			<input type="text" class="input" placeholder="Código de formulario" bind:value={searchCode} />
-			<button type="button" class="ml-2 font-bold btn variant-filled" on:click={findSurvey}>
-				Buscar...
-			</button>
+		<div class="input-group input-group-divider grid-cols-4">
+			<input
+				type="search"
+				class="input col-span-3"
+				placeholder="Código de formulario"
+				bind:value={searchCode}
+			/>
+			<button type="button" class="variant-filled font-bold" on:click={findSurvey}>Buscar</button>
 		</div>
 		{#if $surveys.length > 0}
-			<div class="container card p-4 my-2">
+			<div class="card container my-2 p-4">
 				<p>Formularios completados previamente:</p>
 				{#each $surveys as survey, i (survey)}
 					<section class="my-2">
 						<div class="flex space-x-2">
 							<span>Nombre:</span>
-							<p class="text-surface-900 font-semibold">{survey.name} {survey.surname}</p>
+							<p class="font-semibold text-surface-900">{survey.name} {survey.surname}</p>
 						</div>
 						<div class="flex space-x-2">
 							<span>Email:</span>
-							<p class="text-surface-900 font-semibold">{survey.email}</p>
+							<p class="font-semibold text-surface-900">{survey.email}</p>
 						</div>
 						<div class="flex space-x-2">
 							<span>Asistencia:</span>
-							<p class="text-surface-900 font-semibold">{survey.assistance ? 'Sí' : 'No'}</p>
+							<p class="font-semibold text-surface-900">{survey.assistance ? 'Sí' : 'No'}</p>
 						</div>
 					</section>
 					{#if i !== $surveys.length - 1}

@@ -5,7 +5,7 @@ export type Invite = {
 	name: string;
 	surname?: string;
 	allergies?: string[]; // list of strings matching allergy accessors
-  otherAllergies?: string;
+	otherAllergies?: string;
 };
 
 export type Allergy = {
@@ -21,6 +21,7 @@ export type Survey = {
 	assistance: boolean;
 	busGo: boolean;
 	busReturn: boolean;
+	busReturnEarly: boolean;
 	allergies?: string[]; // list of strings matching allergy accessors
 	otherAllergies?: string;
 	invites?: Invite[];

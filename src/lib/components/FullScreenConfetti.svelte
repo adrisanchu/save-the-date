@@ -2,7 +2,7 @@
 	import { Confetti } from 'svelte-confetti';
 </script>
 
-<div class="flex justify-center items-center fixed top-0 w-screen h-screen">
+<div class="fixed top-0 flex h-screen w-screen items-center justify-center">
 	<Confetti
 		noGravity
 		amount={300}

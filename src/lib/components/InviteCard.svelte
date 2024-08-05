@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { slide } from 'svelte/transition';
+	import { quintInOut } from 'svelte/easing';
 	import BoolSelector from '$lib/components/BoolSelector.svelte';
 	import type { Invite, Allergy } from '$lib/types';
 	import { createEventDispatcher } from 'svelte';
@@ -60,7 +62,7 @@
 	}
 </script>
 
-<div class="card p-4">
+<div class="card p-4" transition:slide={{ duration: 500, easing: quintInOut }}>
 	<header class="mb-2 flex items-center justify-between">
 		<span class="font-bold">Acompañante {num}:</span>
 		<button
@@ -82,6 +84,7 @@
 					name="age"
 					type="number"
 					placeholder="Edad"
+					min="0"
 					bind:value={invite.age}
 				/>
 			{:else}
@@ -117,7 +120,7 @@
 		{#if anyAllergies}
 			<!-- alergias -->
 			<div class="mt-4">
-				<span>Alérgenos/Intolerancias</span>
+				<span>Alérgenos/Intolerancias:</span>
 				<div class="space-y-2">
 					{#each allergies as allergy (allergy.accessor)}
 						<label for={invite.id + '_' + allergy.accessor} class="flex items-center space-x-2">
