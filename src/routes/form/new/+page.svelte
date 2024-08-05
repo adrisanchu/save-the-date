@@ -284,7 +284,10 @@
 									<p>{allergy.name}</p>
 								</label>
 								{#if allergy.accessor == 'other' && allergy.checked}
-									<label class="label">
+									<label
+										class="label"
+										transition:slide|global={{ duration: 600, easing: quintInOut }}
+									>
 										<textarea
 											id="otherAllergies"
 											class="textarea"

@@ -62,7 +62,7 @@
 	}
 </script>
 
-<div class="card p-4" transition:slide={{ duration: 500, easing: quintInOut }}>
+<div class="card p-4" transition:slide={{ duration: 600, easing: quintInOut }}>
 	<header class="mb-2 flex items-center justify-between">
 		<span class="font-bold">Acompañante {num}:</span>
 		<button
@@ -119,7 +119,7 @@
 		/>
 		{#if anyAllergies}
 			<!-- alergias -->
-			<div class="mt-4">
+			<div class="mt-4" transition:slide|global={{ duration: 600, easing: quintInOut }}>
 				<span>Alérgenos/Intolerancias:</span>
 				<div class="space-y-2">
 					{#each allergies as allergy (allergy.accessor)}
@@ -134,7 +134,7 @@
 							<p>{allergy.name}</p>
 						</label>
 						{#if allergy.accessor == 'other' && allergy.checked}
-							<label class="label">
+							<label class="label" transition:slide|global={{ duration: 600, easing: quintInOut }}>
 								<textarea
 									id={invite.id + '_' + 'otherAllergies'}
 									class="textarea"
