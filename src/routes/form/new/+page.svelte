@@ -267,10 +267,10 @@
 			</div>
 
 			{#if assistance}
-				<div class="mt-4" transition:slide|global={{ duration: 800, easing: quintInOut }}>
+				<div class="mt-4" transition:slide|global={{ duration: 600, easing: quintInOut }}>
 					<!-- alergias ? -->
 					<div class="">
-						<h3 class="h3">Alérgenos/Intolerancias:</h3>
+						<h3 class="h3">¿Alguna alergia o intolerancia?</h3>
 						<div class="mt-2 space-y-2">
 							{#each allergies as allergy (allergy.accessor)}
 								<label for={allergy.accessor} class="flex items-center space-x-2">
@@ -300,8 +300,8 @@
 
 					<!-- +X -->
 					<div class="mt-4">
-						<div class="mb-2">
-							<span>¿Con quién?</span>
+						<div class="mb-2 flex">
+							<h3 class="h3">¿Con quién más vienes?</h3>
 							<button
 								type="button"
 								class="variant-filled btn-icon btn-icon-sm ml-2 font-bold"
@@ -324,8 +324,8 @@
 
 					<!-- bus -->
 					<div class="mt-4">
-						<span>En cuanto al transporte...</span>
-						<div class="flex justify-start space-x-8">
+						<h3 class="h3">En cuanto al transporte...</h3>
+						<div class="mt-2 flex justify-start space-x-8">
 							<div class="flex flex-col items-center">
 								<BoolSelector
 									label={'¿Bus de ida?'}
@@ -351,11 +351,15 @@
 					</div>
 
 					{#if busReturn}
-						<div class="flex flex-col items-center">
+						<div
+							class="mt-2 flex flex-col"
+							transition:slide|global={{ duration: 600, easing: quintInOut }}
+						>
 							<BoolSelector
+								layout="vertical"
 								label={'Si pudieras elegir un bus de vuelta...'}
 								bind:value={busReturnEarly}
-								yesLabel={'Cogería el más temprano que haya (21:30)'}
+								yesLabel={'Cogería el más temprano (21:30)'}
 								noLabel={'¡El último que haya!'}
 								on:true={() => (busReturnEarly = true)}
 								on:false={() => (busReturnEarly = false)}
