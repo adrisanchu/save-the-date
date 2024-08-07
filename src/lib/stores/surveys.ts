@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
 import { writable } from 'svelte/store';
-import type { Survey } from '$lib/typesNew';
+import type { Survey } from '$lib/types';
 
 const itemName: string = 'surveys';
 
@@ -14,7 +14,7 @@ const initialStoreValue = browser
 const surveys = writable<Survey[]>(initialStoreValue);
 
 if (typeof localStorage !== 'undefined') {
-	surveys.subscribe((value) => localStorage.surveys = JSON.stringify(value));
+	surveys.subscribe((value) => (localStorage.surveys = JSON.stringify(value)));
 }
 
 export default surveys;

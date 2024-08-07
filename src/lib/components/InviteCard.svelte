@@ -1,16 +1,21 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
+	import { allergies } from '$lib/utils/allergiesList';
 	import BoolSelector from '$lib/components/BoolSelector.svelte';
-	import type { Invite, Allergy } from '$lib/types';
+	import type { Allergy, InviteClientData } from '$lib/types';
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
 
 	export let num: number;
-	export let invite: Invite;
+	export let invite: InviteClientData;
 	export let missing: boolean = false;
 	let anyAllergies: boolean = false;
 	let otherAllergies: string;
+	// Init list with all possible allergies unchecked
+	let inviteAllergies: Allergy[] = allergies.map((allergy) => {
+		return { ...allergy, checked: false };
+	});
 
 	$: if (invite.allergies?.includes('other') && otherAllergies !== '') {
 		invite.otherAllergies = otherAllergies;
@@ -18,32 +23,9 @@
 		delete invite.otherAllergies;
 	}
 
-	let allergies: Allergy[] = [
-		{
-			accessor: 'gluten',
-			name: 'Gluten/celíaco',
-			checked: false
-		},
-		{
-			accessor: 'fish',
-			name: 'Pescado',
-			checked: false
-		},
-		{
-			accessor: 'seafood',
-			name: 'Marisco',
-			checked: false
-		},
-		{
-			accessor: 'other',
-			name: 'Otros (especificar a continuación)',
-			checked: false
-		}
-	];
-
 	// Keep only selected allergies
 	function updateInviteAllergies() {
-		const selectedAllergies = allergies.filter((allergy) => allergy.checked);
+		const selectedAllergies = inviteAllergies.filter((allergy) => allergy.checked);
 		const allergiesStored = selectedAllergies.map((allergy) => {
 			return allergy.accessor;
 		});
@@ -52,7 +34,7 @@
 	}
 
 	function handleAllergyCheck(id: string) {
-		allergies = allergies.map((allergy) => {
+		inviteAllergies = inviteAllergies.map((allergy) => {
 			if (allergy.accessor === id) {
 				allergy.checked = !allergy.checked;
 			}
@@ -108,6 +90,36 @@
 				<p class="text-xs text-error-500">Nombre obligatorio</p>
 			{/if}
 		</label>
+		<!-- surname -->
+		<label for="${invite.id}_surname" class="label">
+			<span>Apellido/s *</span>
+			<input
+				id="surname"
+				name="surname"
+				class="input"
+				autocomplete="family-name"
+				class:input-error={missing && !invite.surname}
+				type="text"
+				placeholder="Cuesta"
+				bind:value={invite.surname}
+			/>
+			{#if missing && !invite.surname}
+				<p class="text-xs text-error-500">Apellido/s obligatorios</p>
+			{/if}
+		</label>
+		<!-- email -->
+		<label for="${invite.id}_email" class="label">
+			<span>Correo electrónico (opcional)</span>
+			<input
+				id="email"
+				class="input"
+				name="email"
+				type="email"
+				placeholder="juancuesta@example.com"
+				autocomplete="email"
+				bind:value={invite.email}
+			/>
+		</label>
 		<!-- alergias ? -->
 		<BoolSelector
 			label={'¿Alguna alergia o intolerancia?'}
@@ -120,9 +132,9 @@
 		{#if anyAllergies}
 			<!-- alergias -->
 			<div class="mt-4" transition:slide|global={{ duration: 600, easing: quintInOut }}>
-				<span>Alérgenos/Intolerancias:</span>
+				<!--<span>Alérgenos/Intolerancias:</span>-->
 				<div class="space-y-2">
-					{#each allergies as allergy (allergy.accessor)}
+					{#each inviteAllergies as allergy (allergy.accessor)}
 						<label for={invite.id + '_' + allergy.accessor} class="flex items-center space-x-2">
 							<input
 								id={invite.id + '_' + allergy.accessor}

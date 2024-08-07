@@ -1,14 +1,26 @@
 <script lang="ts">
+	import { base } from '$app/paths';
+	import { goto } from '$app/navigation';
 	import { slide } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
+	import { allergies } from '$lib/utils/allergiesList';
 	import FullScreenConfetti from '$lib/components/FullScreenConfetti.svelte';
 	import BoolSelector from '$lib/components/BoolSelector.svelte';
 	import InviteCard from '$lib/components/InviteCard.svelte';
-	import type { Survey, Allergy, Invite } from '$lib/types';
+	import type {
+		User,
+		SurveyClientData,
+		Survey,
+		Allergy,
+		InviteClientData,
+		InviteBusOptions,
+		Invite
+	} from '$lib/types';
 	import db from '$lib/db/firebase';
-	import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+	import { doc, writeBatch } from 'firebase/firestore';
+	import { serverTimestamp } from 'firebase/firestore';
 	import { getModalStore, ProgressRadial } from '@skeletonlabs/skeleton';
-	import type { ModalSettings, ModalComponent, ModalStore } from '@skeletonlabs/skeleton';
+	import type { ModalSettings } from '@skeletonlabs/skeleton';
 	import surveys from '$lib/stores/surveys';
 
 	// handle modal pop-up
@@ -28,28 +40,15 @@
 			Si quieres cambiar el formulario en el futuro, guarda este código a buen recaudo! <br />
 			<div class="flex justify-center items-center">
 				<b>${id}</b>
-			</div>`
+			</div>`,
+			response: (r: boolean) => {
+				console.log('modal response:', r);
+				// If not undefined, it means that the modal was closed by the user
+				// Navigate to main page
+				goto(`${base}/form`);
+			}
 		};
 		modalStore.trigger(modal);
-	}
-
-	/**
-	 * A function to test if the confetti and modal pop-up
-	 * are working as expected
-	 * @param id
-	 */
-	function fakeSubmit(id: string) {
-		form.success = true;
-
-		setTimeout(() => {
-			console.log('show modal...');
-			showConfirmationModal(id);
-		}, 2000);
-
-		setTimeout(() => {
-			console.log('re-enable fom (remove confetti!)');
-			form.success = false;
-		}, 2000);
 	}
 
 	let form: any = {
@@ -64,7 +63,6 @@
 		form.name = data.get('name');
 		form.surname = data.get('surname');
 		form.email = data.get('email');
-		// console.log('data:', { name: form.name, surname: form.surname, email: form.email });
 
 		// Check for mandatory props
 		if (!form.name || !form.surname) {
@@ -75,56 +73,102 @@
 		}
 
 		// If invites...
-		if (invites.length > 0 && invites.some((invite) => !invite.name)) {
-			console.error('Missing invite names!');
+		if (
+			invites.length > 0 &&
+			(invites.some((invite) => !invite.name) || invites.some((invite) => !invite.surname))
+		) {
+			console.error('Missing invite compulsory fields!');
 			form.missing = true;
 			form.loading = false;
 			return;
 		}
 
-		// Build Survey Doc to be stored
-		const surveyDoc: Survey = {
+		// Build main user data
+		const user: User = {
+			id: crypto.randomUUID(),
 			name: form.name,
 			surname: form.surname,
-			email: form.email,
-			assistance: assistance,
-			busGo: busGo,
-			busReturn: busReturn,
-			busReturnEarly: busReturnEarly
+			email: form.email
 		};
 
-		// If invites...
-		surveyDoc.invites = invites;
-
 		// Keep only selected allergies
-		const selectedAllergies = allergies.filter((allergy) => allergy.checked);
+		const selectedAllergies = userAllergies.filter((allergy) => allergy.checked);
 		const allergiesStored = selectedAllergies.map((allergy) => {
 			return allergy.accessor;
 		});
 
-		// Add allergies to Survey Doc (if any)
-		if (allergiesStored.length > 0) surveyDoc.allergies = allergiesStored;
+		// Add main user as an invite as well
+		const mainInvite: InviteClientData = {
+			...user,
+			type: 'main'
+		};
+
+		// Add allergies to main invite (if any)
+		if (allergiesStored.length > 0) mainInvite.allergies = allergiesStored;
 
 		// If other allergies...
 		if (allergiesStored.includes('other')) {
-			surveyDoc.otherAllergies = otherAllergies;
+			mainInvite.otherAllergies = otherAllergies;
 		}
+
+		// Add main invite as an invite,
+		// and add it to the list of invites to be stored in DB,
+		// (avoid client manipulation)
+		const allInvites: InviteClientData[] = [...invites, mainInvite];
+
+		// Build Survey Doc to be stored
+		const surveyDoc: SurveyClientData = {
+			createdBy: user,
+			invites: allInvites.map((invite) => invite.id)
+		};
+
+		// Convert invites client data into valid invites to store in DB
+		const invitesDocs: Invite[] = allInvites.map((invite) => {
+			if (assistance) {
+				return {
+					...invite,
+					surveyId: surveyId,
+					assistance: assistance,
+					...inviteBusOptions
+				};
+			} else {
+				return {
+					...invite,
+					surveyId: surveyId,
+					assistance: assistance
+				};
+			}
+		});
 
 		console.log('survey doc:', surveyDoc);
 
-		// Store into DB
+		// Store into DB, in batch mode
 		try {
-			const docRef = await addDoc(collection(db, 'surveys'), {
+			// Start batch
+			const batch = writeBatch(db);
+
+			// Add survey
+			const surveyRef = doc(db, 'surveysNew', surveyId);
+			const surveyStored: Survey = {
 				...surveyDoc,
 				createdAt: serverTimestamp()
+			};
+			batch.set(surveyRef, surveyStored);
+
+			// Add all invites
+			invitesDocs.forEach((invite) => {
+				const inviteRef = doc(db, 'invites', invite.id);
+				batch.set(inviteRef, invite);
 			});
-			console.log('Document written with ID: ', docRef.id);
+
+			// Execute batch
+			await batch.commit();
 
 			// store locally
-			surveys.set([surveyDoc, ...$surveys]);
+			surveys.set([{ ...surveyStored, id: surveyId }, ...$surveys]);
 
 			// display confirmation message
-			showConfirmationModal(docRef.id);
+			showConfirmationModal(surveyRef.id);
 
 			// show some confetti when form is submitted
 			form.success = true;
@@ -134,38 +178,13 @@
 		form.loading = false;
 	}
 
+	// Default variables
 	let assistance: boolean = false;
-	let busGo: boolean = false;
-	let busReturn: boolean = false;
-	let busReturnEarly: boolean = false;
-
+	let anyAllergies: boolean = false;
 	let otherAllergies: string = '';
 
-	let allergies: Allergy[] = [
-		{
-			accessor: 'gluten',
-			name: 'Gluten/celíaco',
-			checked: false
-		},
-		{
-			accessor: 'fish',
-			name: 'Pescado',
-			checked: false
-		},
-		{
-			accessor: 'seafood',
-			name: 'Marisco',
-			checked: false
-		},
-		{
-			accessor: 'other',
-			name: 'Otros (especificar a continuación)',
-			checked: false
-		}
-	];
-
 	function handleAllergyCheck(id: string) {
-		allergies = allergies.map((allergy) => {
+		userAllergies = userAllergies.map((allergy) => {
 			if (allergy.accessor === id) {
 				allergy.checked = !allergy.checked;
 			}
@@ -173,7 +192,22 @@
 		});
 	}
 
-	let invites: Invite[] = [];
+	// Init list of all allergies available to the user
+	let userAllergies: Allergy[] = allergies.map((allergy) => {
+		return { ...allergy, checked: false };
+	});
+
+	// Init survey id to be referenced later on
+	const surveyId: string = crypto.randomUUID();
+
+	// Init bus options for all the invites
+	const inviteBusOptions: InviteBusOptions = {
+		busGo: false,
+		busReturn: false,
+		busReturnEarly: false
+	};
+
+	let invites: InviteClientData[] = [];
 
 	function newInvite() {
 		const uuid = crypto.randomUUID();
@@ -183,7 +217,8 @@
 			{
 				id: uuid,
 				type: 'couple',
-				name: ''
+				name: '',
+				surname: ''
 			}
 		];
 	}
@@ -269,38 +304,46 @@
 			{#if assistance}
 				<div class="mt-4" transition:slide|global={{ duration: 600, easing: quintInOut }}>
 					<!-- alergias ? -->
-					<div class="">
-						<h3 class="h3">¿Alguna alergia o intolerancia?</h3>
-						<div class="mt-2 space-y-2">
-							{#each allergies as allergy (allergy.accessor)}
-								<label for={allergy.accessor} class="flex items-center space-x-2">
-									<input
-										id={allergy.accessor}
-										class="checkbox"
-										type="checkbox"
-										checked={allergy.checked}
-										on:click={() => handleAllergyCheck(allergy.accessor)}
-									/>
-									<p>{allergy.name}</p>
-								</label>
-								{#if allergy.accessor == 'other' && allergy.checked}
-									<label
-										class="label"
-										transition:slide|global={{ duration: 600, easing: quintInOut }}
-									>
-										<textarea
-											id="otherAllergies"
-											class="textarea"
-											rows="4"
-											placeholder="Detalla otras alergias/intolerancias..."
-											bind:value={otherAllergies}
+					<BoolSelector
+						label={'¿Alguna alergia o intolerancia?'}
+						value={anyAllergies}
+						yesLabel={'Sí'}
+						noLabel={'No'}
+						on:true={() => (anyAllergies = true)}
+						on:false={() => (anyAllergies = false)}
+					/>
+					{#if anyAllergies}
+						<div class="mt-4" transition:slide|global={{ duration: 600, easing: quintInOut }}>
+							<div class="mt-2 space-y-2">
+								{#each userAllergies as allergy (allergy.accessor)}
+									<label for={allergy.accessor} class="flex items-center space-x-2">
+										<input
+											id={allergy.accessor}
+											class="checkbox"
+											type="checkbox"
+											checked={allergy.checked}
+											on:click={() => handleAllergyCheck(allergy.accessor)}
 										/>
+										<p>{allergy.name}</p>
 									</label>
-								{/if}
-							{/each}
+									{#if allergy.accessor == 'other' && allergy.checked}
+										<label
+											class="label"
+											transition:slide|global={{ duration: 600, easing: quintInOut }}
+										>
+											<textarea
+												id="otherAllergies"
+												class="textarea"
+												rows="4"
+												placeholder="Detalla otras alergias/intolerancias..."
+												bind:value={otherAllergies}
+											/>
+										</label>
+									{/if}
+								{/each}
+							</div>
 						</div>
-					</div>
-
+					{/if}
 					<!-- +X -->
 					<div class="mt-4">
 						<div class="mb-2 flex">
@@ -332,28 +375,28 @@
 							<div class="flex flex-col items-center">
 								<BoolSelector
 									label={'¿Bus de ida?'}
-									bind:value={busGo}
+									bind:value={inviteBusOptions.busGo}
 									yesLabel={'Sí'}
 									noLabel={'No'}
-									on:true={() => (busGo = true)}
-									on:false={() => (busGo = false)}
+									on:true={() => (inviteBusOptions.busGo = true)}
+									on:false={() => (inviteBusOptions.busGo = false)}
 								/>
 							</div>
 							<span class="divider-vertical h-16" />
 							<div class="flex flex-col items-center">
 								<BoolSelector
 									label={'¿Bus de vuelta?'}
-									bind:value={busReturn}
+									bind:value={inviteBusOptions.busReturn}
 									yesLabel={'Sí'}
 									noLabel={'No'}
-									on:true={() => (busReturn = true)}
-									on:false={() => (busReturn = false)}
+									on:true={() => (inviteBusOptions.busReturn = true)}
+									on:false={() => (inviteBusOptions.busReturn = false)}
 								/>
 							</div>
 						</div>
 					</div>
 
-					{#if busReturn}
+					{#if inviteBusOptions.busReturn}
 						<div
 							class="mt-2 flex flex-col"
 							transition:slide|global={{ duration: 600, easing: quintInOut }}
@@ -361,11 +404,11 @@
 							<BoolSelector
 								layout="vertical"
 								label={'Si pudieras elegir un bus de vuelta...'}
-								bind:value={busReturnEarly}
+								bind:value={inviteBusOptions.busReturnEarly}
 								yesLabel={'Cogería el más temprano (21:30)'}
 								noLabel={'¡El último que haya!'}
-								on:true={() => (busReturnEarly = true)}
-								on:false={() => (busReturnEarly = false)}
+								on:true={() => (inviteBusOptions.busReturnEarly = true)}
+								on:false={() => (inviteBusOptions.busReturnEarly = false)}
 							/>
 						</div>
 					{/if}
@@ -378,12 +421,6 @@
 					</button>
 				{:else}
 					<button class="variant-filled btn" type="submit">Enviar</button>
-					<!-- Test button to simulate pop-up -->
-					<button
-						class="variant-filled btn ml-2"
-						type="button"
-						on:click={() => fakeSubmit('axjshf123')}>Pop-up</button
-					>
 				{/if}
 			</div>
 		</form>
