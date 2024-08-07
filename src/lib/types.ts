@@ -1,12 +1,41 @@
-export type Invite = {
-	id: string;
-	type: string; // couple, child, other
-	age?: number; // for children
+import type { FieldValue } from 'firebase/firestore';
+
+/**
+ * Basic User information
+ */
+export type User = {
+	id: string; // firebase id
 	name: string;
-	surname?: string;
+	surname: string;
+	email?: string;
+};
+
+/**
+ * A person assisting to the event
+ * (data prepared by the client)
+ */
+export type InviteClientData = User & {
+	type: string; // main, couple, child, other
+	age?: number; // for children
 	allergies?: string[]; // list of strings matching allergy accessors
 	otherAllergies?: string;
 };
+
+export type InviteBusOptions = {
+	busGo: boolean;
+	busReturn: boolean;
+	busReturnEarly: boolean;
+};
+
+/**
+ * A person assiting to the event
+ * (if assistance = true)
+ */
+export type Invite = InviteClientData &
+	Partial<InviteBusOptions> & {
+		surveyId: string;
+		assistance: boolean;
+	};
 
 export type Allergy = {
 	accessor: string;
@@ -14,15 +43,15 @@ export type Allergy = {
 	checked: boolean;
 };
 
-export type Survey = {
-	name: string;
-	surname: string;
-	email: string;
-	assistance: boolean;
-	busGo: boolean;
-	busReturn: boolean;
-	busReturnEarly: boolean;
-	allergies?: string[]; // list of strings matching allergy accessors
-	otherAllergies?: string;
-	invites?: Invite[];
+export type SurveyClientData = {
+	createdBy: User; // the user who filled the form
+	invites: string[]; // a list of user ids included within the survey
+};
+
+/**
+ * A form submitted by a single User
+ */
+export type Survey = SurveyClientData & {
+	id?: string;
+	createdAt: FieldValue; // ISO date string
 };
