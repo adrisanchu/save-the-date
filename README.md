@@ -7,7 +7,7 @@ This project was created with Sveltekit and Skeleton UI.
 ## Stack
 
 - The frontend is deployed on `GitHub Pages` as a static site, using the `node adapter-static`.
-- The backend uses `Firebase`. The config keys can be found [here](https://console.firebase.google.com/project/save-the-date-071224/overview).
+- The backend uses `Firebase` (Web Modular API format). The config keys can be found [here](https://console.firebase.google.com/project/save-the-date-071224/overview).
 
 # create-svelte
 

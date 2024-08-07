@@ -7,7 +7,7 @@ Tareas:
   - [x] Itinerario: agenda (mapas Google Maps) + transporte
   - [ ] Recomendaciones: Hoteles, Bares, etc...
   - [ ] Sección FAQ?
-  - [ ] Contacto: Luna de miel + IBAN + teléfonos
+  - [x] Contacto: Luna de miel + IBAN + teléfonos
 
 - [ ] Formulario confirmación de asistencia:
 
@@ -16,10 +16,13 @@ Tareas:
   - [x] Añadir listado de acompañantes (varios para familias?)
   - [x] Añadir confirmación bus ida, vuelta o ambos
   - [x] Avanzado: on:click => loading...
-  - [ ] Al acabar submit, sacar pop-up de confirmación!
+  - [x] Al acabar submit, sacar pop-up de confirmación!
+  - [ ] Ojo si otherAllergies checked...pero el textarea está vacío! Error en firestore!
 
-- [ ] Repensar navegación a single page? estilo la de Vantage?
-      (seguramente haya que insertar un e.preventDefault para evitar añadir los # a la url...)
+- [ ] Vista `/forms`:
+
+  - [ ] Añadir surveyId en los surveys ya completados desde el dispositivo
+  - [ ] Añadir bucles {if} para campos opcionales, como email
 
 - [ ] Probar a modificar el tema para que el texto vaya en el tono de las invitaciones
 - [ ] Letra de la web? Quicksand? La de las invits?
