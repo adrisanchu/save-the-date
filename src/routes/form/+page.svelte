@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { clipboard } from '@skeletonlabs/skeleton';
 	import { goto } from '$app/navigation';
 	import db from '$lib/db/firebase';
 	import surveys from '$lib/stores/surveys';
@@ -40,31 +41,51 @@
 			/>
 			<button type="button" class="variant-filled font-bold" on:click={findSurvey}>Buscar</button>
 		</div>
-		{#if $surveys.length > 0}
-			<div class="card container my-2 p-4">
-				<p>Formularios completados previamente:</p>
+	</div>
+	{#if $surveys.length > 0}
+		<div class="mx-4 md:mx-auto">
+			<h4 class="h4 mb-4 mt-16">Formularios completados previamente:</h4>
+			<div class="card container p-4">
 				{#each $surveys as survey, i (survey)}
-					<section class="my-2">
-						<div class="flex space-x-2">
-							<span>Nombre:</span>
-							<p class="font-semibold text-surface-900">{survey.name} {survey.surname}</p>
+					<section class="my-2 space-y-2">
+						{#if survey.id}
+							<div class="flex items-center">
+								<button
+									use:clipboard={survey.id || ''}
+									class="variant-soft chip hover:variant-filled"
+								>
+									<span class="font-semibold">{survey.id}</span>
+									<span class="ml-6 font-semibold">Copy</span>
+								</button>
+							</div>
+						{/if}
+						<div class="flex flex-col">
+							<span>Creado por:</span>
+							<p class="font-semibold text-surface-900">
+								{survey.createdBy.name}
+								{survey.createdBy.surname}
+							</p>
 						</div>
-						<div class="flex space-x-2">
-							<span>Email:</span>
-							<p class="font-semibold text-surface-900">{survey.email}</p>
-						</div>
-						<div class="flex space-x-2">
-							<span>Asistencia:</span>
-							<p class="font-semibold text-surface-900">{survey.assistance ? 'Sí' : 'No'}</p>
-						</div>
+						{#if survey.createdBy.email}
+							<div class="flex flex-col">
+								<span>Email:</span>
+								<p class="font-semibold text-surface-900">{survey.createdBy.email}</p>
+							</div>
+						{/if}
+						{#if survey.invites.length > 1}
+							<div class="flex space-x-2">
+								<span>Acompañantes:</span>
+								<p class="font-semibold text-surface-900">{survey.invites.length - 1}</p>
+							</div>
+						{/if}
 					</section>
 					{#if i !== $surveys.length - 1}
 						<hr class="!border-t-2" />
 					{/if}
 				{/each}
 			</div>
-		{/if}
-	</div>
+		</div>
+	{/if}
 </div>
 
 <style>
