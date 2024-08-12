@@ -21,9 +21,10 @@ Tareas:
 
 - [ ] Vista `/forms`:
 
-  - [ ] Añadir surveyId en los surveys ya completados desde el dispositivo
-  - [ ] Añadir bucles {if} para campos opcionales, como email
+  - [x] Añadir `surveyId` en los surveys ya completados desde el dispositivo
+  - [x] Añadir bucles {if} para campos opcionales, como email
+  - [ ] Añadir fecha de creación del formulario
 
-- [ ] Probar a modificar el tema para que el texto vaya en el tono de las invitaciones
+- [ ] Probar a modificar el tema para que el texto vaya en el tono de las invitaciones?
 - [ ] Letra de la web? Quicksand? La de las invits?
 - [ ] Añadir image meta tag para que salga al compartir el enlace
