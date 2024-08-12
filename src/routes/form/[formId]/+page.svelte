@@ -67,6 +67,7 @@
 			</div>
 
 			<div class="card container mx-4 mb-2 space-y-4 p-4">
+				<h3 class="h3">Asistencia y transporte:</h3>
 				<!-- confirm -->
 				<div>
 					<BoolSelector

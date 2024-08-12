@@ -75,7 +75,7 @@
 						{#if survey.invites.length > 1}
 							<div class="flex space-x-2">
 								<span>Acompañantes:</span>
-								<p class="font-semibold text-surface-900">{survey.invites.length - 1}</p>
+								<p class="font-semibold text-surface-900">+{survey.invites.length - 1}</p>
 							</div>
 						{/if}
 					</section>
