@@ -21,9 +21,12 @@ export type InviteClientData = User & {
 	otherAllergies?: string;
 };
 
-export type InviteBusOptions = {
+export type BusOptions = {
 	busGo: boolean;
 	busReturn: boolean;
+};
+
+export type BusOptionsWithReturn = BusOptions & {
 	busReturnEarly: boolean;
 };
 
@@ -31,11 +34,11 @@ export type InviteBusOptions = {
  * A person assiting to the event
  * (if assistance = true)
  */
-export type Invite = InviteClientData &
-	Partial<InviteBusOptions> & {
-		surveyId: string;
-		assistance: boolean;
-	};
+export type Invite = InviteClientData & {
+	surveyId: string;
+	assistance: boolean;
+	bus?: BusOptions | BusOptionsWithReturn;
+};
 
 export type Allergy = {
 	accessor: string;

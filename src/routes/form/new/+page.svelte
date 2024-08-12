@@ -13,8 +13,9 @@
 		Survey,
 		Allergy,
 		InviteClientData,
-		InviteBusOptions,
-		Invite
+		Invite,
+		BusOptions,
+		BusOptionsWithReturn
 	} from '$lib/types';
 	import db from '$lib/db/firebase';
 	import { doc, writeBatch } from 'firebase/firestore';
@@ -122,6 +123,12 @@
 			invites: allInvites.map((invite) => invite.id)
 		};
 
+		// Clean up inviteBusOptions depending on if there is a return bus or not
+		const busOpts: BusOptions | BusOptionsWithReturn =
+			inviteBusOptions.busReturn === false
+				? { busGo: inviteBusOptions.busGo, busReturn: inviteBusOptions.busReturn }
+				: { ...inviteBusOptions };
+
 		// Convert invites client data into valid invites to store in DB
 		const invitesDocs: Invite[] = allInvites.map((invite) => {
 			if (assistance) {
@@ -129,7 +136,7 @@
 					...invite,
 					surveyId: surveyId,
 					assistance: assistance,
-					...inviteBusOptions
+					bus: busOpts
 				};
 			} else {
 				return {
@@ -148,7 +155,7 @@
 			const batch = writeBatch(db);
 
 			// Add survey
-			const surveyRef = doc(db, 'surveysNew', surveyId);
+			const surveyRef = doc(db, 'surveys', surveyId);
 			const surveyStored: Survey = {
 				...surveyDoc,
 				createdAt: serverTimestamp()
@@ -165,6 +172,8 @@
 			await batch.commit();
 
 			// store locally
+			// TODO: instead of doing it from the client,
+			// store the result obtained from the server!
 			surveys.set([{ ...surveyStored, id: surveyId }, ...$surveys]);
 
 			// display confirmation message
@@ -201,7 +210,7 @@
 	const surveyId: string = crypto.randomUUID();
 
 	// Init bus options for all the invites
-	const inviteBusOptions: InviteBusOptions = {
+	const inviteBusOptions: BusOptionsWithReturn = {
 		busGo: false,
 		busReturn: false,
 		busReturnEarly: false
