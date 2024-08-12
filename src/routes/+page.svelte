@@ -2,7 +2,8 @@
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import { onMount } from 'svelte';
-	import { countdownTimer } from '$lib/utils';
+	import type { DiffTimeStr } from '$lib/utils/datetimeFunc';
+	import { countdownTimer } from '$lib/utils/datetimeFunc';
 
 	// Animation controls
 	let ready: boolean = false;
@@ -10,9 +11,9 @@
 	const duration: number = 1500;
 
 	// Countdown initial setup
-	const weddingDate: Date = new Date('2024-12-07T12:30:00');
+	const weddingDate: Date = new Date('2024-12-07T12:30:00+01:00');
 
-	let countdown = {
+	let countdown: DiffTimeStr = {
 		months: '00',
 		days: '00',
 		hours: '00',
