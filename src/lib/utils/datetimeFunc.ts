@@ -1,3 +1,19 @@
+export type DiffTime = {
+	months?: number;
+	days: number;
+	hours: number;
+	minutes: number;
+	seconds: number;
+};
+
+export type DiffTimeStr = {
+	months?: string;
+	days: string;
+	hours: string;
+	minutes: string;
+	seconds: string;
+};
+
 /**
  * Calculates the countdown time between two given dates.
  *
@@ -5,7 +21,7 @@
  * @param {Date} endDate - The end date of the countdown.
  * @return {Object} An object containing the countdown time in months, days, hours, minutes and seconds.
  */
-export function countdownTimer(startDate: Date, endDate: Date) {
+export function countdownTimer(startDate: Date, endDate: Date): DiffTimeStr {
 	// Calculate the distance between now and the count down date
 	const diffTime = endDate.getTime() - startDate.getTime();
 	// Distance in days
