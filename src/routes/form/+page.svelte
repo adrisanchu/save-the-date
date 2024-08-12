@@ -20,7 +20,7 @@
 				// navigate to the page
 				goto(`${base}/form/${searchCode}`);
 			} else {
-				console.log('No such document!');
+				console.error('No such document!');
 				// display an error
 			}
 		}

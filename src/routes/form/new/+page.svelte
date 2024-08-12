@@ -38,13 +38,12 @@
 			buttonTextCancel: '¡Entendido!',
 			body: `¡Pues ya estaría! <br />
 			De parte de Isa y Adri, muchas gracias por tu colaboración :) <br />
-			Si quieres cambiar el formulario en el futuro, guarda este código a buen recaudo! <br />
+			Si quieres cambiar el formulario en el futuro, este es tu código: <br />
 			<div class="flex justify-center items-center">
 				<b>${id}</b>
-			</div>`,
+			</div><br />
+			(No te preocupes: Se guardará en este dispositivo)`,
 			response: (r: boolean) => {
-				console.log('modal response:', r);
-				// If not undefined, it means that the modal was closed by the user
 				// Navigate to main page
 				goto(`${base}/form`);
 			}
@@ -147,8 +146,6 @@
 			}
 		});
 
-		console.log('survey doc:', surveyDoc);
-
 		// Store into DB, in batch mode
 		try {
 			// Start batch
@@ -220,7 +217,6 @@
 
 	function newInvite() {
 		const uuid = crypto.randomUUID();
-		console.log('add invite: ', uuid);
 		invites = [
 			...invites,
 			{
@@ -233,7 +229,6 @@
 	}
 
 	function removeInvite(id: string) {
-		console.log('remove invite: ', id);
 		const index = invites.findIndex((invite) => invite.id === id);
 		if (index !== -1) {
 			invites = [...invites.slice(0, index), ...invites.slice(index + 1)];

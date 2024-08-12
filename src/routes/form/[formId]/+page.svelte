@@ -15,25 +15,21 @@
 	const getInvite = async (id: string) => {
 		const docSnap = await getDoc(doc(db, 'invites', id));
 		if (docSnap.exists()) {
-			console.log('Invite data:', docSnap.data());
 			return docSnap.data() as Invite;
 		} else {
 			// docSnap.data() will be undefined in this case
-			console.log('No invite found for id: ', id);
+			console.error('No invite found for id: ', id);
 			return {} as Invite;
 		}
 	};
 
 	const getSurvey = async () => {
-		console.log('Loading survey...');
 		const docSnap = await getDoc(docRef);
 
 		if (docSnap.exists()) {
-			console.log('Survey data:', docSnap.data());
 			survey = docSnap.data() as Survey;
 			if (survey.invites.length > 0) {
 				// populate invites array
-				console.log('searching invites data...');
 				survey.invites.forEach((id) => {
 					getInvite(id).then((invite) => {
 						if (invite.type == 'main') {
@@ -46,7 +42,7 @@
 			}
 		} else {
 			// docSnap.data() will be undefined in this case
-			console.log('No such document!');
+			console.error('No such document!');
 		}
 	};
 

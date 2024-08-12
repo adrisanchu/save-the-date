@@ -19,7 +19,7 @@
 		});
 	});
 
-	$: console.log(`You're visiting: `, { path: $page.url.pathname, url: $page.url });
+	// $: console.log(`You're visiting: `, { path: $page.url.pathname, url: $page.url });
 
 	// Floating UI for Popups
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
