@@ -18,10 +18,10 @@
 			const docSnap = await getDoc(docRef);
 			if (docSnap.exists()) {
 				// navigate to the page
-				goto(`${base}/form/${searchCode}`);
+				goto(`${base}/form/view?id=${searchCode}`);
 			} else {
 				console.error('No such document!');
-				// display an error
+				// TODO: display an error
 			}
 		}
 	}
