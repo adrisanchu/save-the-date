@@ -20,7 +20,7 @@ const config = {
 			strict: false
 		}),
 		paths: {
-			assets: 'https://adrisanchu.github.io/' + process.env.BASE_PATH,
+			assets: 'https://isa-y-adri.site',
 			base: process.argv.includes('dev') ? '' : process.env.BASE_PATH
 		},
 		prerender: {
