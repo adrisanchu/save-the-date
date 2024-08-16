@@ -1,6 +1,17 @@
 <script lang="ts">
 	import { clipboard } from '@skeletonlabs/skeleton';
+	import { Clipboard } from 'lucide-svelte';
+	import { ClipboardCheck } from 'lucide-svelte';
+
 	const accountNumber: string = 'ES55 2100 0988 3702 0010 0793';
+	let valueCopied: boolean = false;
+
+	function onClickHandler(): void {
+		valueCopied = true;
+		setTimeout(() => {
+			valueCopied = false;
+		}, 3000);
+	}
 </script>
 
 <head>
@@ -46,8 +57,16 @@
 					<span class="text-lg">{accountNumber}</span>
 					<button
 						use:clipboard={accountNumber.replace(/\s/g, '')}
-						class="variant-filled btn-icon btn-icon-sm h-8 w-8 font-bold">C</button
+						on:click={onClickHandler}
+						disabled={valueCopied}
+						class="variant-filled btn-icon btn-icon-sm h-8 w-8 font-bold"
 					>
+						{#if !valueCopied}
+							<Clipboard size={20} />
+						{:else}
+							<ClipboardCheck size={20} />
+						{/if}
+					</button>
 				</div>
 			</div>
 		</div>
