@@ -1,10 +1,18 @@
 <script lang="ts">
+	import { popup } from '@skeletonlabs/skeleton';
+	import type { PopupSettings } from '@skeletonlabs/skeleton';
 	import { clipboard } from '@skeletonlabs/skeleton';
 	import { Clipboard } from 'lucide-svelte';
 	import { ClipboardCheck } from 'lucide-svelte';
 
 	const accountNumber: string = 'ES55 2100 0988 3702 0010 0793';
 	let valueCopied: boolean = false;
+
+	const popupClick: PopupSettings = {
+		event: 'click',
+		target: 'popupClick',
+		placement: 'top'
+	};
 
 	function onClickHandler(): void {
 		valueCopied = true;
@@ -53,11 +61,16 @@
 					Para nosotros, el mejor regalo es que nos acompañéis en este día tan especial.<br />
 					Y si queréis ayudarnos a llegar a Japón...
 				</p>
-				<div class="mt-4 flex items-center justify-center space-x-2">
+				<div class="card variant-filled-surface p-2" data-popup="popupClick">
+					<p class="text-sm">¡Copiado!</p>
+					<div class="variant-filled-surface arrow" />
+				</div>
+				<div class="mt-4 flex items-center justify-between space-x-2">
 					<span class="text-lg">{accountNumber}</span>
 					<button
 						use:clipboard={accountNumber.replace(/\s/g, '')}
 						on:click={onClickHandler}
+						use:popup={popupClick}
 						disabled={valueCopied}
 						class="variant-filled btn-icon btn-icon-sm h-8 w-8 font-bold"
 					>
