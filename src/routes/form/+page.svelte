@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { clipboard } from '@skeletonlabs/skeleton';
+	import { Clipboard } from 'lucide-svelte';
 	import { goto } from '$app/navigation';
 	import db from '$lib/db/firebase';
 	import surveys from '$lib/stores/surveys';
@@ -46,18 +47,20 @@
 		<div class="mx-4 md:mx-auto">
 			<h4 class="h4 mb-4 mt-16">Formularios completados previamente:</h4>
 			<div class="card container p-4">
-				{#each $surveys as survey, i (survey)}
+				{#each $surveys as survey, i (i)}
 					<section class="my-2 space-y-2">
 						{#if survey.id}
-							<div class="flex items-center">
-								<button
-									use:clipboard={survey.id || ''}
-									class="variant-soft chip hover:variant-filled"
-								>
+							<button
+								use:clipboard={survey.id || ''}
+								class="variant-soft chip min-w-full hover:variant-filled"
+							>
+								<div class="flex items-center justify-between">
 									<span class="font-semibold">{survey.id}</span>
-									<span class="ml-6 font-semibold">Copy</span>
-								</button>
-							</div>
+									<span class="ml-6">
+										<Clipboard size={18} />
+									</span>
+								</div>
+							</button>
 						{/if}
 						<div class="flex flex-col">
 							<span>Creado por:</span>
