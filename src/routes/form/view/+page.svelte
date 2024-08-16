@@ -3,6 +3,7 @@
 	import db from '$lib/db/firebase';
 	import { doc, getDoc } from 'firebase/firestore';
 	import type { Survey, Invite } from '$lib/types';
+	import BoolSelector from '$lib/components/BoolSelector.svelte';
 	import InviteCardSubmitted from '$lib/components/InviteCardSubmitted.svelte';
 
 	let status: string = 'pending';
@@ -37,7 +38,7 @@
 
 	const sleep = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay));
 	const sleepTrigger = async () => {
-		await sleep(5000);
+		await sleep(2500);
 	};
 
 	const fetchData = async () => {
@@ -95,6 +96,66 @@
 				<div class="card container mx-4 mb-2 space-y-4 p-4">
 					<h3 class="h3">Datos personales:</h3>
 					<InviteCardSubmitted invite={mainInvite} />
+				</div>
+
+				<div class="card container mx-4 mb-2 space-y-4 p-4">
+					<h3 class="h3">Asistencia y transporte:</h3>
+					<!-- confirm -->
+					<div>
+						<BoolSelector
+							disabled={true}
+							label={'¿Vas a venir a la boda?'}
+							value={mainInvite?.assistance}
+							yesLabel={'Sí'}
+							noLabel={'No'}
+						/>
+					</div>
+					{#if mainInvite.bus}
+						<!-- bus -->
+						<div class="mt-2 flex justify-start space-x-8">
+							<div class="flex flex-col items-center">
+								<BoolSelector
+									disabled={true}
+									label={'¿Bus de ida?'}
+									value={mainInvite?.bus.busGo}
+									yesLabel={'Sí'}
+									noLabel={'No'}
+								/>
+							</div>
+
+							<span class="divider-vertical h-16" />
+							<div class="flex flex-col items-center">
+								<BoolSelector
+									disabled={true}
+									label={'¿Bus de vuelta?'}
+									value={mainInvite?.bus.busReturn}
+									yesLabel={'Sí'}
+									noLabel={'No'}
+								/>
+							</div>
+						</div>
+						{#if 'busReturnEarly' in mainInvite.bus && mainInvite.bus.busReturnEarly !== undefined}
+							<div class="mt-2 flex flex-col">
+								<BoolSelector
+									disabled={true}
+									layout="vertical"
+									label={'Si pudieras elegir un bus de vuelta...'}
+									value={mainInvite?.bus?.busReturnEarly}
+									yesLabel={'Cogería el más temprano (21:30)'}
+									noLabel={'¡El último que haya!'}
+								/>
+							</div>
+						{/if}
+					{/if}
+				</div>
+			{/if}
+
+			{#if invites && invites.length > 0}
+				<div class="card container mx-4 mb-2 space-y-4 p-4">
+					<h3 class="h3">Acompañantes:</h3>
+					{#each invites as invite (invite.id)}
+						<InviteCardSubmitted {invite} />
+					{/each}
 				</div>
 			{/if}
 		</div>
