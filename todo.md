@@ -18,12 +18,15 @@ Tareas:
   - [x] Avanzado: on:click => loading...
   - [x] Al acabar submit, sacar pop-up de confirmación!
   - [ ] Ojo si otherAllergies checked...pero el textarea está vacío! Error en firestore!
+  - [ ] Añadir campo `validated: false`, para poder distinguir qué `surveys` e `invites` ya hemos chequeado de los que no!
+  - [ ] Arreglar modal final de confirmación + Confetti ?
 
 - [ ] Vista `/forms`:
 
   - [x] Añadir `surveyId` en los surveys ya completados desde el dispositivo
   - [x] Añadir bucles {if} para campos opcionales, como email
   - [ ] Añadir fecha de creación del formulario
+  - [ ] Añadir iconos y tooltip de "copiado" al copiar el id de cada survey
 
 - [ ] Probar a modificar el tema para que el texto vaya en el tono de las invitaciones?
 - [ ] Letra de la web? Quicksand? La de las invits?
