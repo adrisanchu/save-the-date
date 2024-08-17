@@ -26,7 +26,7 @@ Tareas:
   - [x] Añadir `surveyId` en los surveys ya completados desde el dispositivo
   - [x] Añadir bucles {if} para campos opcionales, como email
   - [ ] Añadir fecha de creación del formulario
-  - [ ] Añadir iconos y tooltip de "copiado" al copiar el id de cada survey
+  - [x] Añadir iconos y tooltip de "copiado" al copiar el id de cada survey
 
 - [ ] Probar a modificar el tema para que el texto vaya en el tono de las invitaciones?
 - [ ] Letra de la web? Quicksand? La de las invits?
