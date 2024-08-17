@@ -1,8 +1,11 @@
 <script lang="ts">
+	import { Undo2 } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import db from '$lib/db/firebase';
 	import { doc, getDoc } from 'firebase/firestore';
+	import { base } from '$app/paths';
 	import type { Survey, Invite } from '$lib/types';
+	import Placeholder from '$lib/components/Placeholder.svelte';
 	import BoolSelector from '$lib/components/BoolSelector.svelte';
 	import InviteCardSubmitted from '$lib/components/InviteCardSubmitted.svelte';
 
@@ -81,16 +84,40 @@
 </script>
 
 <div class="flex flex-col">
-	{#if status == 'error'}
-		<h2 id="form" class="h2 mb-4 ml-6 pt-20">Formulario no encontrado :(</h2>
-	{:else if status == 'pending'}
-		<h2 id="form" class="h2 mb-4 ml-6 pt-20">Cargando...</h2>
-	{:else if survey}
-		<h2 id="form" class="h2 mb-4 ml-6 pt-20">
-			Formulario de Asistencia
-			<span class="variant-filled chip">{survey.id}</span>
+	<div class="mb-4 ml-6 flex justify-between pt-20">
+		<h2 id="form" class="h2">
+			{#if status == 'error'}
+				Formulario no encontrado :(
+			{:else if status == 'pending'}
+				Cargando...
+			{:else if status == 'success'}
+				Formulario de Asistencia
+				<br />
+				<span class="variant-filled chip">{survey.id || ''}</span>
+			{/if}
 		</h2>
+		<div class="mr-5">
+			<a href="{base}/form" class="variant-filled btn-icon btn-icon-sm h-8 w-8 font-bold">
+				<Undo2 size={20} />
+			</a>
+		</div>
+	</div>
 
+	{#if status == 'pending'}
+		<div class="flex flex-wrap items-center justify-center">
+			<section class="card container mx-4 mb-2 space-y-4 p-4">
+				<Placeholder animated={true} />
+			</section>
+			<section class="card container mx-4 mb-2 space-y-4 p-4">
+				<Placeholder animated={true} />
+			</section>
+			<section class="card container mx-4 mb-2 space-y-4 p-4">
+				<Placeholder animated={true} />
+			</section>
+		</div>
+	{/if}
+
+	{#if survey}
 		<div class="flex flex-wrap items-center justify-center">
 			{#if mainInvite}
 				<div class="card container mx-4 mb-2 space-y-4 p-4">
