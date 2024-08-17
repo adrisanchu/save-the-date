@@ -62,7 +62,7 @@
 					Y si queréis ayudarnos a llegar a Japón...
 				</p>
 				<div class="card variant-filled-surface p-2" data-popup="popupClick">
-					<p class="text-sm">¡Copiado!</p>
+					<p class="text-sm text-surface-900">¡Copiado!</p>
 					<div class="variant-filled-surface arrow" />
 				</div>
 				<div class="mt-4 flex items-center justify-between space-x-2">
