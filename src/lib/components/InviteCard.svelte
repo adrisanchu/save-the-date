@@ -153,10 +153,15 @@
 								<textarea
 									id={invite.id + '_' + 'otherAllergies'}
 									class="textarea"
+									class:input-error={missing &&
+										(otherAllergies === '' || otherAllergies == undefined)}
 									rows="4"
 									placeholder="Detalla otras alergias/intolerancias..."
 									bind:value={otherAllergies}
 								/>
+								{#if missing && (otherAllergies === '' || otherAllergies == undefined)}
+									<p class="text-xs text-error-500">Especificar alergias</p>
+								{/if}
 							</label>
 						{/if}
 					{/each}
