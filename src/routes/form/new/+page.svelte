@@ -454,6 +454,11 @@
 				</div>
 			{/if}
 			<div class="flex justify-end pt-4">
+				{#if form?.missing}
+					<div class="input-error btn mr-4">
+						<p>Revisar datos!</p>
+					</div>
+				{/if}
 				{#if form.loading}
 					<button disabled class="variant-filled btn" type="submit">
 						<ProgressRadial value={undefined} class="mr-2 h-4 w-4" />Enviar
