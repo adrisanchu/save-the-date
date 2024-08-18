@@ -17,9 +17,12 @@
 		return { ...allergy, checked: false };
 	});
 
-	$: if (invite.allergies?.includes('other') && otherAllergies !== '') {
+	$: if (invite.allergies?.includes('other') && otherAllergies !== undefined) {
 		invite.otherAllergies = otherAllergies;
-	} else {
+	} else if (
+		(otherAllergies === undefined || otherAllergies === '') &&
+		'otherAllergies' in invite
+	) {
 		delete invite.otherAllergies;
 	}
 
