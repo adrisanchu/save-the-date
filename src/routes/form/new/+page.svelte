@@ -23,6 +23,7 @@
 	import { getModalStore, ProgressRadial } from '@skeletonlabs/skeleton';
 	import type { ModalSettings } from '@skeletonlabs/skeleton';
 	import surveys from '$lib/stores/surveys';
+	import { TriangleAlert } from 'lucide-svelte';
 
 	// handle modal pop-up
 	const modalStore = getModalStore();
@@ -456,6 +457,7 @@
 			<div class="flex justify-end pt-4">
 				{#if form?.missing}
 					<div class="input-error btn mr-4">
+						<TriangleAlert />
 						<p>Revisar datos!</p>
 					</div>
 				{/if}
