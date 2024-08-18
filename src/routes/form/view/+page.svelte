@@ -87,7 +87,7 @@
 	<div class="mb-4 ml-6 flex justify-between pt-20">
 		<h2 id="form" class="h2">
 			{#if status == 'error'}
-				Formulario no encontrado :(
+				Formulario no encontrado
 			{:else if status == 'pending'}
 				Cargando...
 			{:else if status == 'success'}

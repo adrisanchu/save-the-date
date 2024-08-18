@@ -36,13 +36,17 @@
 			type: 'alert',
 			title: '¡Formulario recibido!',
 			buttonTextCancel: '¡Entendido!',
-			body: `¡Pues ya estaría! <br />
-			De parte de Isa y Adri, muchas gracias por tu colaboración :) <br />
-			Si quieres cambiar el formulario en el futuro, este es tu código: <br />
-			<div class="flex justify-center items-center">
-				<b>${id}</b>
-			</div><br />
-			(No te preocupes: Se guardará en este dispositivo)`,
+			body: `<div class="flex flex-col">
+				<p>¡Pues ya estaría! De parte de Isa y Adri, muchas gracias por tu colaboración :) <br />
+				Si quieres cambiar el formulario en el futuro, este es tu código: </p>
+				<div class="my-2 flex justify-center items-center variant-soft chip">
+					<span class="font-semibold">${id}</span>
+				</div>
+				<div>
+					<p class="text-sm italic">(No te preocupes! Este código se guardará en este dispositivo automáticamente)</p>
+				</div>
+			</div>
+			`,
 			response: (r: boolean) => {
 				// Navigate to main page
 				goto(`${base}/form`);
@@ -103,12 +107,38 @@
 			type: 'main'
 		};
 
+		// If other allergies...
+		if (allergiesStored.includes('other')) {
+			if (otherAllergies) {
+				mainInvite.otherAllergies = otherAllergies;
+			} else {
+				console.error('Missing otherAllergies!');
+				form.missing = true;
+				form.loading = false;
+				return;
+			}
+		}
+
 		// Add allergies to main invite (if any)
 		if (allergiesStored.length > 0) mainInvite.allergies = allergiesStored;
 
-		// If other allergies...
-		if (allergiesStored.includes('other')) {
-			mainInvite.otherAllergies = otherAllergies;
+		// Clean-up invites allergies as well...
+		let invalidForm: boolean = false;
+		invites.forEach((inv) => {
+			if (inv.allergies) {
+				if (inv.allergies.includes('other')) {
+					if (!('otherAllergies' in inv) || inv.otherAllergies === undefined) {
+						console.error('Missing otherAllergies in one of the invites!', inv);
+						invalidForm = true;
+					}
+				}
+			}
+		});
+
+		if (invalidForm) {
+			form.missing = true;
+			form.loading = false;
+			return;
 		}
 
 		// Add main invite as an invite,
@@ -338,10 +368,15 @@
 											<textarea
 												id="otherAllergies"
 												class="textarea"
+												class:input-error={form?.missing &&
+													(otherAllergies === '' || otherAllergies == undefined)}
 												rows="4"
 												placeholder="Detalla otras alergias/intolerancias..."
 												bind:value={otherAllergies}
 											/>
+											{#if form?.missing && (otherAllergies === '' || otherAllergies == undefined)}
+												<p class="text-xs text-error-500">Especificar alergias</p>
+											{/if}
 										</label>
 									{/if}
 								{/each}
