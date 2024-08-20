@@ -4,6 +4,7 @@
 	import db from '$lib/db/firebase';
 	import { doc, getDoc } from 'firebase/firestore';
 	import { base } from '$app/paths';
+	import { sleepTrigger } from '$lib/utils/sleepFunc';
 	import type { Survey, Invite } from '$lib/types';
 	import Placeholder from '$lib/components/Placeholder.svelte';
 	import BoolSelector from '$lib/components/BoolSelector.svelte';
@@ -39,13 +40,8 @@
 		}
 	};
 
-	const sleep = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay));
-	const sleepTrigger = async () => {
-		await sleep(2500);
-	};
-
 	const fetchData = async () => {
-		sleepTrigger().then(() => {
+		sleepTrigger(2500).then(() => {
 			getSurvey()
 				.then((data) => {
 					console.log('Promise resolved!');
