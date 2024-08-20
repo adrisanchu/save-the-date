@@ -49,6 +49,16 @@
 		</button>
 	{/if}
 	<div class="flex flex-col">
+		<p class="text-surface-900">
+			{survey.createdAt.toDate().toLocaleDateString('es-ES', {
+				weekday: 'long',
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric'
+			})}
+		</p>
+	</div>
+	<div class="flex flex-col">
 		<span>Creado por:</span>
 		<p class="font-semibold text-surface-900">
 			{survey.createdBy.name}
