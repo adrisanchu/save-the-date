@@ -2,6 +2,7 @@
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import { onMount } from 'svelte';
+	import { base } from '$app/paths';
 	import type { DiffTimeStr } from '$lib/utils/datetimeFunc';
 	import { countdownTimer } from '$lib/utils/datetimeFunc';
 
@@ -46,6 +47,13 @@
 		<h1 class="title h1">Save the date!</h1>
 		<h2 class="title h2">Adri & Isa</h2>
 		<p>07.12.2024</p>
+	</div>
+
+	<div
+		class="fixed bottom-32 left-6 flex flex-col items-center text-surface-500"
+		in:fly|global={{ delay: delay * 3, duration: duration, easing: quintOut, x: -100 }}
+	>
+		<a href="{base}/form" class="variant-filled btn">Confirma tu <br /> asistencia</a>
 	</div>
 
 	<div
