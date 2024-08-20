@@ -1,12 +1,16 @@
 <script lang="ts">
 	import SurveyCard from '$lib/components/SurveyCard.svelte';
+	import Placeholder from '$lib/components/Placeholder.svelte';
 	import { goto } from '$app/navigation';
 	import db from '$lib/db/firebase';
 	import surveys from '$lib/stores/surveys';
 	import { doc, getDoc } from 'firebase/firestore';
 	import { base } from '$app/paths';
+	import type { Survey } from '$lib/types';
+	import { sleepTrigger } from '$lib/utils/sleepFunc';
 
 	let searchCode: string = '';
+	const localSurveys: Survey[] = [];
 
 	/**
 	 * Find a survey based on the input field
@@ -22,6 +26,24 @@
 			} else {
 				console.error('No such document!');
 				// TODO: display an error
+			}
+		}
+	}
+
+	/**
+	 * Fetch all surveys based on localStorage IDs
+	 */
+	async function fetchLocalSurveys() {
+		await sleepTrigger(2000);
+		for (let i = 0; i < $surveys.length; i++) {
+			const surveyId = $surveys[i];
+			// get the survey from firebase
+			const docRef = doc(db, 'surveys', surveyId);
+			const docSnap = await getDoc(docRef);
+
+			if (docSnap.exists()) {
+				// add to localSurveys
+				localSurveys.push({ ...(docSnap.data() as Survey), id: surveyId });
 			}
 		}
 	}
@@ -42,19 +64,32 @@
 			<button type="button" class="variant-filled font-bold" on:click={findSurvey}>Buscar</button>
 		</div>
 	</div>
-	{#if $surveys.length > 0}
-		<div class="mx-4 md:mx-auto">
-			<h4 class="h4 mb-4 mt-16">Formularios completados previamente:</h4>
-			<div class="card container p-4">
-				{#each $surveys as survey, i (i)}
-					<SurveyCard {survey} />
-					{#if i !== $surveys.length - 1}
-						<hr class="!border-t-2" />
-					{/if}
-				{/each}
-			</div>
-		</div>
-	{/if}
+	<div class="mx-4 mt-12 md:mx-auto">
+		{#if $surveys.length > 0}
+			{#await fetchLocalSurveys()}
+				<div class="flex flex-wrap items-center justify-center">
+					<section class="card container mx-4 mb-2 space-y-4 p-4">
+						<Placeholder animated={true} />
+					</section>
+					<section class="card container mx-4 mb-2 space-y-4 p-4">
+						<Placeholder animated={true} />
+					</section>
+				</div>
+			{:then data}
+				{#if localSurveys.length > 0}
+					<h4 class="h4 mb-2">Formularios completados previamente:</h4>
+					<div class="card container mb-4 px-4 py-1">
+						{#each localSurveys as survey, i (i)}
+							<SurveyCard {survey} />
+							{#if i !== localSurveys.length - 1}
+								<hr class="!border-t-2" />
+							{/if}
+						{/each}
+					</div>
+				{/if}
+			{/await}
+		{/if}
+	</div>
 </div>
 
 <style>
