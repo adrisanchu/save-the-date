@@ -58,3 +58,9 @@ export type Survey = SurveyClientData & {
 	id?: string;
 	createdAt: FieldValue; // ISO date string
 };
+
+export type LegalDetails = {
+	name: string;
+	id: string;
+	address: string;
+};

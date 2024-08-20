@@ -56,6 +56,7 @@
 		modalStore.trigger(modal);
 	}
 
+	let terms: boolean = false;
 	let form: any = {
 		missing: false,
 		loading: false,
@@ -454,6 +455,14 @@
 					{/if}
 				</div>
 			{/if}
+			<label for="terms" class="flex items-center space-x-2">
+				<input id="terms" name="terms" class="checkbox" type="checkbox" bind:checked={terms} />
+				<p>
+					Acepto los <a href="{base}/terms" class="anchor" target="_blank" rel="noopener noreferrer"
+						>términos y condiciones</a
+					> para el tratamiento de mis datos.
+				</p>
+			</label>
 			<div class="flex justify-end pt-4">
 				{#if form?.missing}
 					<div class="input-error btn mr-4">
@@ -466,7 +475,7 @@
 						<ProgressRadial value={undefined} class="mr-2 h-4 w-4" />Enviar
 					</button>
 				{:else}
-					<button class="variant-filled btn" type="submit">Enviar</button>
+					<button class="variant-filled btn" type="submit" disabled={!terms}>Enviar</button>
 				{/if}
 			</div>
 		</form>
