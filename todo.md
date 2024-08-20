@@ -8,8 +8,9 @@ Tareas:
   - [ ] Recomendaciones: Hoteles, Bares, etc...
   - [ ] Sección FAQ?
   - [x] Contacto: Luna de miel + IBAN + teléfonos
+  - [ ] `/terms`: términos y condiciones para el tratamiento de datos
 
-- [ ] Formulario confirmación de asistencia:
+- [x] Formulario confirmación de asistencia:
 
   - [x] Básico: datos personales + alergias + asistencia...
   - [x] Setup con Firebase
@@ -17,9 +18,9 @@ Tareas:
   - [x] Añadir confirmación bus ida, vuelta o ambos
   - [x] Avanzado: on:click => loading...
   - [x] Al acabar submit, sacar pop-up de confirmación!
-  - [ ] Ojo si otherAllergies checked...pero el textarea está vacío! Error en firestore!
-  - [ ] Añadir campo `validated: false`, para poder distinguir qué `surveys` e `invites` ya hemos chequeado de los que no!
-  - [ ] Arreglar modal final de confirmación + Confetti ?
+  - [x] Ojo si otherAllergies checked...pero el textarea está vacío! Error en firestore!
+  - [x] Arreglar modal final de confirmación
+  - [x] Añadir botón de aceptar los términos y condiciones
 
 - [ ] Vista `/forms`:
 
