@@ -1,4 +1,4 @@
-import type { FieldValue } from 'firebase/firestore';
+import type { Timestamp } from 'firebase/firestore';
 
 /**
  * Basic User information
@@ -56,7 +56,7 @@ export type SurveyClientData = {
  */
 export type Survey = SurveyClientData & {
 	id?: string;
-	createdAt: FieldValue; // ISO date string
+	createdAt: Timestamp; // Firestore timestamp
 };
 
 export type LegalDetails = {

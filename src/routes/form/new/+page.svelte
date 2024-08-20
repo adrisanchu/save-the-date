@@ -18,8 +18,8 @@
 		BusOptionsWithReturn
 	} from '$lib/types';
 	import db from '$lib/db/firebase';
-	import { doc, writeBatch } from 'firebase/firestore';
-	import { serverTimestamp } from 'firebase/firestore';
+	import { doc, writeBatch, serverTimestamp } from 'firebase/firestore';
+	import type { Timestamp } from 'firebase/firestore';
 	import { getModalStore, ProgressRadial } from '@skeletonlabs/skeleton';
 	import type { ModalSettings } from '@skeletonlabs/skeleton';
 	import surveys from '$lib/stores/surveys';
@@ -187,7 +187,7 @@
 			const surveyRef = doc(db, 'surveys', surveyId);
 			const surveyStored: Survey = {
 				...surveyDoc,
-				createdAt: serverTimestamp()
+				createdAt: serverTimestamp() as Timestamp
 			};
 			batch.set(surveyRef, surveyStored);
 
@@ -200,10 +200,8 @@
 			// Execute batch
 			await batch.commit();
 
-			// store locally
-			// TODO: instead of doing it from the client,
-			// store the result obtained from the server!
-			surveys.set([{ ...surveyStored, id: surveyId }, ...$surveys]);
+			// store locally a reference to the survey
+			surveys.set([...$surveys, surveyId]);
 
 			// display confirmation message
 			showConfirmationModal(surveyRef.id);
