@@ -43,6 +43,7 @@
 	"dependencies": {
 		"@floating-ui/dom": "1.5.3",
 		"@types/dom-view-transitions": "^1.0.4",
+		"chart.js": "^4.4.4",
 		"firebase": "^10.11.1",
 		"lucide-svelte": "^0.428.0",
 		"svelte-vertical-timeline": "^1.0.0"
