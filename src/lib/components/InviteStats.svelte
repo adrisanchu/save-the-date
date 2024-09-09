@@ -100,7 +100,7 @@
 
 	<div class="card">
 		<h2 class="card-header">Invitados con alergias especiales</h2>
-		<div class="card-content">
+		<div class="p-4">
 			<ul>
 				{#each allergicInvites as invite}
 					<li>
