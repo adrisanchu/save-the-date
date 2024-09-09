@@ -1,6 +1,13 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
 	import { user } from '$lib/stores/auth';
 	import Placeholder from '$lib/components/Placeholder.svelte';
+
+	$: if ($user == null && browser) {
+		console.warn('An unknown user is trying to access a protected route. Redirecting to login.');
+		goto('/login');
+	}
 </script>
 
 {#if !$user}
