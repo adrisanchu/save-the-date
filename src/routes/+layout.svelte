@@ -6,8 +6,6 @@
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import { onMount } from 'svelte';
 	import { auth } from '$lib/db/firebase';
-	import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
 	import { user } from '$lib/stores/auth';
 
 	import { onNavigate } from '$app/navigation';
@@ -52,15 +50,6 @@
 				if (!firebaseUser.emailVerified) {
 					console.warn('Email not verified');
 				}
-			} else {
-				// User is signed out
-				console.log('User is signed out');
-
-				// Clear the user store
-				user.set(null);
-
-				// Redirect to home page or login page
-				if (browser) goto('/login');
 			}
 		});
 
