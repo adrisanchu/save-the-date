@@ -4,6 +4,11 @@
 	import { AppBar } from '@skeletonlabs/skeleton';
 	import HeroIcon from '$lib/components/HeroIcon.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
+	import { onMount } from 'svelte';
+	import { auth } from '$lib/db/firebase';
+	import { browser } from '$app/environment';
+	import { goto } from '$app/navigation';
+	import { user } from '$lib/stores/auth';
 
 	import { onNavigate } from '$app/navigation';
 
@@ -29,6 +34,40 @@
 	// Modals setup
 	import { initializeStores, Modal } from '@skeletonlabs/skeleton';
 	initializeStores();
+
+	// Firebase auth handler
+	let unsubscribe: () => void;
+
+	onMount(() => {
+		// Firebase auth handler
+		unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
+			if (firebaseUser) {
+				// User is signed in
+				console.log('User is signed in:', firebaseUser.uid);
+
+				// Update the user store
+				user.set(firebaseUser);
+
+				// Check if the user's email is verified
+				if (!firebaseUser.emailVerified) {
+					console.warn('Email not verified');
+				}
+			} else {
+				// User is signed out
+				console.log('User is signed out');
+
+				// Clear the user store
+				user.set(null);
+
+				// Redirect to home page or login page
+				if (browser) goto('/login');
+			}
+		});
+
+		return () => {
+			if (unsubscribe) unsubscribe();
+		};
+	});
 </script>
 
 <Modal />
