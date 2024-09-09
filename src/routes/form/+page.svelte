@@ -2,7 +2,7 @@
 	import SurveyCard from '$lib/components/SurveyCard.svelte';
 	import Placeholder from '$lib/components/Placeholder.svelte';
 	import { goto } from '$app/navigation';
-	import db from '$lib/db/firebase';
+	import { db } from '$lib/db/firebase';
 	import surveys from '$lib/stores/surveys';
 	import { doc, getDoc } from 'firebase/firestore';
 	import { base } from '$app/paths';

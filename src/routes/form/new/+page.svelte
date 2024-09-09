@@ -17,7 +17,7 @@
 		BusOptions,
 		BusOptionsWithReturn
 	} from '$lib/types';
-	import db from '$lib/db/firebase';
+	import { db } from '$lib/db/firebase';
 	import { doc, writeBatch, serverTimestamp } from 'firebase/firestore';
 	import type { Timestamp } from 'firebase/firestore';
 	import { getModalStore, ProgressRadial } from '@skeletonlabs/skeleton';

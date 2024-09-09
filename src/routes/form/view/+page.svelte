@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Undo2 } from 'lucide-svelte';
 	import { onMount } from 'svelte';
-	import db from '$lib/db/firebase';
+	import { db } from '$lib/db/firebase';
 	import { doc, getDoc } from 'firebase/firestore';
 	import { base } from '$app/paths';
 	import { sleepTrigger } from '$lib/utils/sleepFunc';
