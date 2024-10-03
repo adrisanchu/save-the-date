@@ -1,13 +1,23 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { browser } from '$app/environment';
 	import { user } from '$lib/stores/auth';
 	import Placeholder from '$lib/components/Placeholder.svelte';
 
-	$: if ($user == null && browser) {
-		console.warn('An unknown user is trying to access a protected route. Redirecting to login.');
-		goto('/login');
-	}
+	/**
+	 * Check if user is logged in
+	 */
+	const checkUser = async () => {
+		await user.known;
+		if (!$user) {
+			console.warn('An unknown user is trying to access a protected route. Redirecting to login.');
+			goto('/login');
+		}
+	};
+
+	onMount(async () => {
+		checkUser();
+	});
 </script>
 
 {#if !$user}

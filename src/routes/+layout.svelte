@@ -32,31 +32,6 @@
 	// Modals setup
 	import { initializeStores, Modal } from '@skeletonlabs/skeleton';
 	initializeStores();
-
-	// Firebase auth handler
-	let unsubscribe: () => void;
-
-	onMount(() => {
-		// Firebase auth handler
-		unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
-			if (firebaseUser) {
-				// User is signed in
-				console.log('User is signed in:', firebaseUser.uid);
-
-				// Update the user store
-				user.set(firebaseUser);
-
-				// Check if the user's email is verified
-				if (!firebaseUser.emailVerified) {
-					console.warn('Email not verified');
-				}
-			}
-		});
-
-		return () => {
-			if (unsubscribe) unsubscribe();
-		};
-	});
 </script>
 
 <Modal />
