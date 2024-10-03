@@ -9,8 +9,21 @@
 	let assistedInvites: Invite[] = [];
 	let allergicInvites: Invite[] = [];
 
-	let barChart: any;
-	let pieChart: any;
+	let invitesByTypeChart: any;
+	let invitesAssistingChart: any;
+
+	const style = getComputedStyle(document.body);
+	const primaryColor = convertToRGB(style.getPropertyValue('--color-primary-500'));
+	const secondaryColor = convertToRGB(style.getPropertyValue('--color-secondary-500'));
+	const tertiaryColor = convertToRGB(style.getPropertyValue('--color-tertiary-600'));
+	const surfaceColor = convertToRGB(style.getPropertyValue('--color-surface-500'));
+	const successColor = convertToRGB(style.getPropertyValue('--color-success-500'));
+	const errorColor = convertToRGB(style.getPropertyValue('--color-error-500'));
+
+	function convertToRGB(color: string) {
+		const [r, g, b] = color.split(' ');
+		return `rgb(${r}, ${g}, ${b})`;
+	}
 
 	function calculateCharts() {
 		// Calculate the number of invites by type
@@ -30,17 +43,17 @@
 
 	onMount(() => {
 		// Set up the bar chart
-		const barCtx = barChart.getContext('2d');
-		if (barCtx) {
-			barChart = new Chart(barCtx, {
-				type: 'pie',
+		const invitesByTypeCtx = invitesByTypeChart.getContext('2d');
+		if (invitesByTypeCtx) {
+			invitesByTypeChart = new Chart(invitesByTypeCtx, {
+				type: 'doughnut',
 				data: {
 					labels: Object.keys(inviteTypes),
 					datasets: [
 						{
 							label: 'Invites',
 							data: Object.values(inviteTypes),
-							backgroundColor: ['#36A2EB', '#FF6384', '#4BC0C0', '#FFCE56']
+							backgroundColor: [primaryColor, secondaryColor, tertiaryColor, surfaceColor]
 						}
 					]
 				},
@@ -56,9 +69,9 @@
 		}
 
 		// Set up the pie chart
-		const pieCtx = pieChart.getContext('2d');
-		if (pieCtx) {
-			pieChart = new Chart(pieCtx, {
+		const invitesAssistingCtx = invitesAssistingChart.getContext('2d');
+		if (invitesAssistingCtx) {
+			invitesAssistingChart = new Chart(invitesAssistingCtx, {
 				type: 'pie',
 				data: {
 					labels: ['Sí', 'No'],
@@ -66,7 +79,7 @@
 						{
 							label: 'Invites',
 							data: [assistedInvites.length, invites.length - assistedInvites.length],
-							backgroundColor: ['#36A2EB', '#FF6384']
+							backgroundColor: [successColor, errorColor]
 						}
 					]
 				},
@@ -87,14 +100,14 @@
 	<div class="card">
 		<h2 class="card-header">Invitados por Tipo</h2>
 		<div class="align-items mb-2 flex justify-center">
-			<canvas bind:this={barChart}></canvas>
+			<canvas bind:this={invitesByTypeChart}></canvas>
 		</div>
 	</div>
 
 	<div class="card">
 		<h2 class="card-header">Asistencia</h2>
 		<div class="align-items mb-2 flex justify-center">
-			<canvas bind:this={pieChart}></canvas>
+			<canvas bind:this={invitesAssistingChart}></canvas>
 		</div>
 	</div>
 
