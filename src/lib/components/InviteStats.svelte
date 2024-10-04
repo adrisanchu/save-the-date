@@ -6,23 +6,41 @@
 	export let invites: Invite[];
 
 	let inviteTypes: { [key: string]: number } = {};
+	let inviteBuses: { [key: string]: number } = {};
 	let assistedInvites: Invite[] = [];
 	let allergicInvites: Invite[] = [];
 
 	let invitesByTypeChart: any;
+	let invitesByBusChart: any;
 	let invitesAssistingChart: any;
 
 	const style = getComputedStyle(document.body);
-	const primaryColor = convertToRGB(style.getPropertyValue('--color-primary-500'));
-	const secondaryColor = convertToRGB(style.getPropertyValue('--color-secondary-500'));
-	const tertiaryColor = convertToRGB(style.getPropertyValue('--color-tertiary-600'));
-	const surfaceColor = convertToRGB(style.getPropertyValue('--color-surface-500'));
-	const successColor = convertToRGB(style.getPropertyValue('--color-success-500'));
-	const errorColor = convertToRGB(style.getPropertyValue('--color-error-500'));
+	const primaryColor = style.getPropertyValue('--color-primary-500');
+	const secondaryColor = style.getPropertyValue('--color-secondary-500');
+	const tertiaryColor = style.getPropertyValue('--color-tertiary-600');
+	const surfaceColor = style.getPropertyValue('--color-surface-500');
+	const successColor = style.getPropertyValue('--color-success-500');
+	const errorColor = style.getPropertyValue('--color-error-500');
+
+	type ColorKeys = 'primary' | 'secondary' | 'tertiary' | 'surface' | 'success' | 'error';
+	type Colors = { [key in ColorKeys]: string };
+	const colors: Colors = {
+		primary: primaryColor,
+		secondary: secondaryColor,
+		tertiary: tertiaryColor,
+		surface: surfaceColor,
+		success: successColor,
+		error: errorColor
+	};
+
+	function getColor(key: ColorKeys, transparency: number = 0) {
+		return convertToRGB(colors[key] + ` ${transparency}`);
+	}
 
 	function convertToRGB(color: string) {
-		const [r, g, b] = color.split(' ');
-		return `rgb(${r}, ${g}, ${b})`;
+		const [r, g, b, a] = color.split(' ');
+		if (!a) return `rgb(${r}, ${g}, ${b})`;
+		return `rgba(${r}, ${g}, ${b}, ${a})`;
 	}
 
 	function calculateCharts() {
@@ -31,6 +49,31 @@
 		invites.forEach((invite) => {
 			inviteTypes[invite.type] = (inviteTypes[invite.type] || 0) + 1;
 		});
+
+		// Calculate the number of invites by bus conditions
+		inviteBuses = {};
+
+		invites.forEach((invite) => {
+			// A: no bus
+			if (invite.bus?.busGo === false && invite.bus?.busReturn === false) {
+				inviteBuses['No Bus'] = (inviteBuses['No Bus'] || 0) + 1;
+			}
+			// B: bus go and return early
+			else if (
+				invite.bus?.busGo === true &&
+				'busReturnEarly' in invite.bus &&
+				invite.bus?.busReturnEarly === true
+			) {
+				inviteBuses['Bus (Return Early)'] = (inviteBuses['Bus (Return Early)'] || 0) + 1;
+			}
+			// C: bus go and return late
+			else if (invite.bus?.busGo === true && invite.bus?.busReturn === true) {
+				inviteBuses['Bus (Go & Return)'] = (inviteBuses['Bus (Go & Return)'] || 0) + 1;
+			}
+			// TODO: D: only one bus?
+		});
+
+		console.log('inviteBuses: ', inviteBuses);
 
 		// Filter invites with assistance == true
 		assistedInvites = invites.filter((invite) => invite.assistance);
@@ -53,7 +96,18 @@
 						{
 							label: 'Invites',
 							data: Object.values(inviteTypes),
-							backgroundColor: [primaryColor, secondaryColor, tertiaryColor, surfaceColor]
+							backgroundColor: [
+								getColor('primary', 0.6),
+								getColor('secondary', 0.6),
+								getColor('tertiary', 0.6),
+								getColor('surface', 0.6)
+							],
+							borderColor: [
+								getColor('primary', 0.8),
+								getColor('secondary', 0.8),
+								getColor('tertiary', 0.8),
+								getColor('surface', 0.8)
+							]
 						}
 					]
 				},
@@ -79,7 +133,8 @@
 						{
 							label: 'Invites',
 							data: [assistedInvites.length, invites.length - assistedInvites.length],
-							backgroundColor: [successColor, errorColor]
+							backgroundColor: [getColor('success', 0.6), getColor('error', 0.6)],
+							borderColor: [getColor('success', 0.8), getColor('error', 0.8)]
 						}
 					]
 				},
@@ -93,20 +148,80 @@
 				}
 			});
 		}
+
+		// Set up the bar chart
+		const invitesByBusCtx = invitesByBusChart.getContext('2d');
+		if (invitesByBusCtx) {
+			invitesByBusChart = new Chart(invitesByBusCtx, {
+				type: 'doughnut',
+				data: {
+					labels: Object.keys(inviteBuses),
+					datasets: [
+						{
+							label: 'Invites',
+							data: Object.values(inviteBuses),
+							backgroundColor: [
+								getColor('primary', 0.6),
+								getColor('secondary', 0.6),
+								getColor('tertiary', 0.6),
+								getColor('surface', 0.6)
+							],
+							borderColor: [
+								getColor('primary', 0.8),
+								getColor('secondary', 0.8),
+								getColor('tertiary', 0.8),
+								getColor('surface', 0.8)
+							]
+						}
+					]
+				},
+				options: {
+					plugins: {
+						title: {
+							display: false,
+							text: 'Invites by Bus'
+						}
+					}
+				}
+			});
+		}
 	});
 </script>
 
 <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+	<div class="grid grid-cols-2 gap-4 sm:grid-cols-1">
+		<div class="card">
+			<h2 class="card-header">Núm. Invitados</h2>
+			<div class="align-items mb-4 flex justify-center">
+				<span class="text-2xl">{assistedInvites.length}</span>
+			</div>
+		</div>
+
+		<div class="card">
+			<h2 class="card-header">Núm. Formularios</h2>
+			<div class="align-items mb-4 flex justify-center">
+				<span class="text-2xl">{'??'}</span>
+			</div>
+		</div>
+	</div>
+
 	<div class="card">
 		<h2 class="card-header">Invitados por Tipo</h2>
-		<div class="align-items mb-2 flex justify-center">
+		<div class="align-items mb-4 flex justify-center">
 			<canvas bind:this={invitesByTypeChart}></canvas>
 		</div>
 	</div>
 
 	<div class="card">
+		<h2 class="card-header">Transporte</h2>
+		<div class="align-items mb-4 flex justify-center">
+			<canvas bind:this={invitesByBusChart}></canvas>
+		</div>
+	</div>
+
+	<div class="card">
 		<h2 class="card-header">Asistencia</h2>
-		<div class="align-items mb-2 flex justify-center">
+		<div class="align-items mb-4 flex justify-center">
 			<canvas bind:this={invitesAssistingChart}></canvas>
 		</div>
 	</div>
