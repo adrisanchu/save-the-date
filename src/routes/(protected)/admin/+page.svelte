@@ -9,6 +9,7 @@
 	import { sleepTrigger } from '$lib/utils/sleepFunc';
 	import Placeholder from '$lib/components/Placeholder.svelte';
 	import InviteStats from '$lib/components/InviteStats.svelte';
+	import InviteChecklist from '$lib/components/InviteChecklist.svelte';
 	import type { Invite } from '$lib/types';
 	import { Tab, TabGroup } from '@skeletonlabs/skeleton';
 
@@ -83,7 +84,7 @@
 							{#if tabSet === 0}
 								<InviteStats {invites} />
 							{:else if tabSet === 1}
-								<p>(Aquí aparecerá el listado de invitados)</p>
+								<InviteChecklist {invites} />
 							{/if}
 						</svelte:fragment>
 					</TabGroup>
