@@ -4,9 +4,6 @@
 	import { AppBar } from '@skeletonlabs/skeleton';
 	import HeroIcon from '$lib/components/HeroIcon.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
-	import { onMount } from 'svelte';
-	import { auth } from '$lib/db/firebase';
-	import { user } from '$lib/stores/auth';
 
 	import { onNavigate } from '$app/navigation';
 

@@ -8,7 +8,7 @@ Tareas:
   - [ ] Recomendaciones: Hoteles, Bares, etc...
   - [ ] Sección FAQ?
   - [x] Contacto: Luna de miel + IBAN + teléfonos
-  - [ ] `/terms`: términos y condiciones para el tratamiento de datos
+  - [x] `/terms`: términos y condiciones para el tratamiento de datos
 
 - [x] Formulario confirmación de asistencia:
 
@@ -28,6 +28,16 @@ Tareas:
   - [x] Añadir bucles {if} para campos opcionales, como email
   - [ ] Añadir fecha de creación del formulario
   - [x] Añadir iconos y tooltip de "copiado" al copiar el id de cada survey
+  - [x] Mejorar formato del buscador de formularios + warnings
+
+- [ ] Vista `/admin`:
+
+  - [x] Integrar Firebase auth
+  - [x] Arreglar auth persistance
+  - [x] Usar colores del tema de la web
+  - [x] Indicadores de num invitados por tipo/bus ...
+  - [ ] Matriz invitados/alergias
+  - [ ] Listado invitados revisados / no-revisados
 
 - [ ] Probar a modificar el tema para que el texto vaya en el tono de las invitaciones?
 - [ ] Letra de la web? Quicksand? La de las invits?
