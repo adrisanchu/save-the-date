@@ -14,7 +14,8 @@
 
 	const handleInviteClick = (invite: Invite) => {
 		// Update the invite's status to "reviewed"
-		invite.status = 'reviewed';
+		// invite.status = 'reviewed';
+		console.log('reviewed!', invite);
 
 		// Move the invite from the unreviewed to the reviewed list
 		unreviewed = unreviewed.filter((i) => i.id !== invite.id);
