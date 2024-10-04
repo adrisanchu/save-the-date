@@ -8,7 +8,7 @@
 	export let invites: Invite[];
 
 	let inviteTypes: { [key: string]: number } = {};
-	let inviteBuses: { [key: string]: number } = {};
+	let inviteBuses: { [key: string]: Invite[] } = {};
 	let assistedInvites: Invite[] = [];
 	let allergicInvites: Invite[] = [];
 
@@ -29,23 +29,37 @@
 		invites.forEach((invite) => {
 			// A: no bus
 			if (invite.bus?.busGo === false && invite.bus?.busReturn === false) {
-				inviteBuses['No Bus'] = (inviteBuses['No Bus'] || 0) + 1;
+				if ('No Bus' in inviteBuses === false) {
+					inviteBuses['No Bus'] = [];
+				}
+				inviteBuses['No Bus'].push(invite);
 			}
 			// B: bus go
 			if (invite.bus?.busGo === true) {
-				inviteBuses['Bus Ida'] = (inviteBuses['Bus Ida'] || 0) + 1;
+				if ('Bus Ida' in inviteBuses === false) {
+					inviteBuses['Bus Ida'] = [];
+				}
+				inviteBuses['Bus Ida'].push(invite);
 			}
 			// C: bus return
 			if (invite.bus?.busReturn === true) {
 				if ('busReturnEarly' in invite.bus && invite.bus?.busReturnEarly === true) {
 					// C1: return early
-					inviteBuses['Bus Vuelta pronto'] = (inviteBuses['Bus Vuelta pronto'] || 0) + 1;
+					if ('Bus Vuelta pronto' in inviteBuses === false) {
+						inviteBuses['Bus Vuelta pronto'] = [];
+					}
+					inviteBuses['Bus Vuelta pronto'].push(invite);
 				} else {
 					// C2: return late
-					inviteBuses['Bus Vuelta tarde'] = (inviteBuses['Bus Vuelta tarde'] || 0) + 1;
+					if ('Bus Vuelta tarde' in inviteBuses === false) {
+						inviteBuses['Bus Vuelta tarde'] = [];
+					}
+					inviteBuses['Bus Vuelta tarde'].push(invite);
 				}
 			}
 		});
+
+		console.log('inviteBuses: ', inviteBuses);
 
 		// Filter invites with assistance == true
 		assistedInvites = invites.filter((invite) => invite.assistance);
@@ -131,7 +145,7 @@
 					datasets: [
 						{
 							label: 'Invites',
-							data: Object.values(inviteBuses),
+							data: Object.entries(inviteBuses).map(([key, value]) => value.length),
 							backgroundColor: [
 								getColor('primary', 0.6),
 								getColor('secondary', 0.6),
@@ -166,7 +180,11 @@
 		console.log('activeElement: ', activeElement);
 		if (!activeElement) return;
 		const ctx = activeElement.element.$context;
-		console.log('context: ', ctx);
+		const clickedCategory: string = Object.keys(inviteBuses)[ctx.dataIndex];
+		const invitesClicked = inviteBuses[clickedCategory].map((i) => {
+			return `${i.name} ${i.surname}`;
+		});
+		console.log(invitesClicked);
 	}
 </script>
 
