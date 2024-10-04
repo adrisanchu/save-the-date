@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { user } from '$lib/stores/auth';
+	import { initColors } from '$lib/utils/colors';
 	import Placeholder from '$lib/components/Placeholder.svelte';
 
 	/**
@@ -17,6 +18,9 @@
 
 	onMount(async () => {
 		checkUser();
+		// initialize colors from the theme to be used in the admin panel
+		const style = getComputedStyle(document.body);
+		initColors(style);
 	});
 </script>
 

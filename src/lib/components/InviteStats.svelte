@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { Chart } from 'chart.js/auto';
 	import type { Invite } from '$lib/types';
+	import { getColor } from '$lib/utils/colors';
 
 	export let invites: Invite[];
 
@@ -13,35 +14,6 @@
 	let invitesByTypeChart: any;
 	let invitesByBusChart: any;
 	let invitesAssistingChart: any;
-
-	const style = getComputedStyle(document.body);
-	const primaryColor = style.getPropertyValue('--color-primary-500');
-	const secondaryColor = style.getPropertyValue('--color-secondary-500');
-	const tertiaryColor = style.getPropertyValue('--color-tertiary-600');
-	const surfaceColor = style.getPropertyValue('--color-surface-500');
-	const successColor = style.getPropertyValue('--color-success-500');
-	const errorColor = style.getPropertyValue('--color-error-500');
-
-	type ColorKeys = 'primary' | 'secondary' | 'tertiary' | 'surface' | 'success' | 'error';
-	type Colors = { [key in ColorKeys]: string };
-	const colors: Colors = {
-		primary: primaryColor,
-		secondary: secondaryColor,
-		tertiary: tertiaryColor,
-		surface: surfaceColor,
-		success: successColor,
-		error: errorColor
-	};
-
-	function getColor(key: ColorKeys, transparency: number = 0) {
-		return convertToRGB(colors[key] + ` ${transparency}`);
-	}
-
-	function convertToRGB(color: string) {
-		const [r, g, b, a] = color.split(' ');
-		if (!a) return `rgb(${r}, ${g}, ${b})`;
-		return `rgba(${r}, ${g}, ${b}, ${a})`;
-	}
 
 	function calculateCharts() {
 		// Calculate the number of invites by type
