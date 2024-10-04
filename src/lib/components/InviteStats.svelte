@@ -30,22 +30,21 @@
 			if (invite.bus?.busGo === false && invite.bus?.busReturn === false) {
 				inviteBuses['No Bus'] = (inviteBuses['No Bus'] || 0) + 1;
 			}
-			// B: bus go and return early
-			else if (
-				invite.bus?.busGo === true &&
-				'busReturnEarly' in invite.bus &&
-				invite.bus?.busReturnEarly === true
-			) {
-				inviteBuses['Bus (Return Early)'] = (inviteBuses['Bus (Return Early)'] || 0) + 1;
+			// B: bus go
+			if (invite.bus?.busGo === true) {
+				inviteBuses['Bus Ida'] = (inviteBuses['Bus Ida'] || 0) + 1;
 			}
-			// C: bus go and return late
-			else if (invite.bus?.busGo === true && invite.bus?.busReturn === true) {
-				inviteBuses['Bus (Go & Return)'] = (inviteBuses['Bus (Go & Return)'] || 0) + 1;
+			// C: bus return
+			if (invite.bus?.busReturn === true) {
+				if ('busReturnEarly' in invite.bus && invite.bus?.busReturnEarly === true) {
+					// C1: return early
+					inviteBuses['Bus Vuelta pronto'] = (inviteBuses['Bus Vuelta pronto'] || 0) + 1;
+				} else {
+					// C2: return late
+					inviteBuses['Bus Vuelta tarde'] = (inviteBuses['Bus Vuelta tarde'] || 0) + 1;
+				}
 			}
-			// TODO: D: only one bus?
 		});
-
-		console.log('inviteBuses: ', inviteBuses);
 
 		// Filter invites with assistance == true
 		assistedInvites = invites.filter((invite) => invite.assistance);
@@ -125,7 +124,7 @@
 		const invitesByBusCtx = invitesByBusChart.getContext('2d');
 		if (invitesByBusCtx) {
 			invitesByBusChart = new Chart(invitesByBusCtx, {
-				type: 'doughnut',
+				type: 'bar',
 				data: {
 					labels: Object.keys(inviteBuses),
 					datasets: [
@@ -149,6 +148,7 @@
 				},
 				options: {
 					plugins: {
+						legend: { display: false },
 						title: {
 							display: false,
 							text: 'Invites by Bus'
@@ -186,7 +186,7 @@
 
 	<div class="card">
 		<h2 class="card-header">Transporte</h2>
-		<div class="align-items mb-4 flex justify-center">
+		<div class="align-items mx-4 mb-4 flex justify-center">
 			<canvas bind:this={invitesByBusChart}></canvas>
 		</div>
 	</div>
