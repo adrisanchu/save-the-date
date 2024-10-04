@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { Chart } from 'chart.js/auto';
+	import type { ChartEvent } from 'chart.js';
 	import type { Invite } from '$lib/types';
 	import { getColor } from '$lib/utils/colors';
 
@@ -153,11 +154,20 @@
 							display: false,
 							text: 'Invites by Bus'
 						}
-					}
+					},
+					onClick: handleBusClick
 				}
 			});
 		}
 	});
+
+	function handleBusClick(event: ChartEvent) {
+		const activeElement = invitesByBusChart.getActiveElements(event)[0];
+		console.log('activeElement: ', activeElement);
+		if (!activeElement) return;
+		const ctx = activeElement.element.$context;
+		console.log('context: ', ctx);
+	}
 </script>
 
 <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
