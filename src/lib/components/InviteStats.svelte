@@ -4,6 +4,18 @@
 	import type { ChartEvent } from 'chart.js';
 	import type { Invite } from '$lib/types';
 	import { getColor } from '$lib/utils/colors';
+	import { getModalStore } from '@skeletonlabs/skeleton';
+	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
+
+	import ModalInvitesList from '$lib/components/ModalInvitesList.svelte';
+
+	const modalInvList: ModalComponent = {
+		ref: ModalInvitesList,
+		props: { invites: [] }
+	};
+
+	// handle modal pop-up
+	const modalStore = getModalStore();
 
 	export let invites: Invite[];
 
@@ -181,10 +193,20 @@
 		if (!activeElement) return;
 		const ctx = activeElement.element.$context;
 		const clickedCategory: string = Object.keys(inviteBuses)[ctx.dataIndex];
-		const invitesClicked = inviteBuses[clickedCategory].map((i) => {
-			return `${i.name} ${i.surname}`;
-		});
-		console.log(invitesClicked);
+
+		// Update the list of clicked invites and show a modal
+		modalInvList.props!.invites = inviteBuses[clickedCategory];
+		showInvitesModal(clickedCategory);
+	}
+
+	function showInvitesModal(clickedCategory: string) {
+		const modal: ModalSettings = {
+			type: 'component',
+			component: modalInvList,
+			title: 'Lista de Invitados',
+			body: clickedCategory
+		};
+		modalStore.trigger(modal);
 	}
 </script>
 
