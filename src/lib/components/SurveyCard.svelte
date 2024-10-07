@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { popup } from '@skeletonlabs/skeleton';
+	import { base } from '$app/paths';
+	import { popup, clipboard } from '@skeletonlabs/skeleton';
 	import type { PopupSettings } from '@skeletonlabs/skeleton';
-	import { clipboard } from '@skeletonlabs/skeleton';
-	import { Clipboard } from 'lucide-svelte';
-	import { ClipboardCheck } from 'lucide-svelte';
+	import { Clipboard, ClipboardCheck, SquarePen, Eye } from 'lucide-svelte';
 	import type { Survey } from '$lib/types';
 
 	export let survey: Survey;
@@ -48,7 +47,7 @@
 			</div>
 		</button>
 	{/if}
-	<div class="flex flex-col">
+	<div class="flex items-center justify-between">
 		<p class="text-surface-900">
 			{survey.createdAt.toDate().toLocaleDateString('es-ES', {
 				weekday: 'long',
@@ -57,6 +56,20 @@
 				day: 'numeric'
 			})}
 		</p>
+		<div class="ml-2 space-x-2">
+			<a
+				href="{base}/form/edit/?id={survey.id}"
+				class="variant-filled btn-icon btn-icon-sm h-8 w-8 font-bold"
+			>
+				<SquarePen size={16} />
+			</a>
+			<a
+				href="{base}/form/view/?id={survey.id}"
+				class="variant-filled btn-icon btn-icon-sm h-8 w-8 font-bold"
+			>
+				<Eye size={16} />
+			</a>
+		</div>
 	</div>
 	<div class="flex flex-col">
 		<span>Creado por:</span>
