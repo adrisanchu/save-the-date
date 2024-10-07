@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Undo2 } from 'lucide-svelte';
+	import { SquarePen, Undo2 } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { db } from '$lib/db/firebase';
 	import { doc, getDoc } from 'firebase/firestore';
@@ -117,7 +117,16 @@
 		<div class="flex flex-wrap items-center justify-center">
 			{#if mainInvite}
 				<div class="card container mx-4 mb-2 space-y-4 p-4">
-					<h3 class="h3">Datos personales:</h3>
+					<div class="flex justify-between">
+						<h3 class="h3">Datos personales:</h3>
+						<a
+							href="{base}/form/edit/?id={survey.id}"
+							class="variant-filled btn-icon btn-icon-sm h-8 w-8 font-bold"
+						>
+							<SquarePen size={20} />
+						</a>
+					</div>
+
 					<InviteCardSubmitted invite={mainInvite} />
 				</div>
 
