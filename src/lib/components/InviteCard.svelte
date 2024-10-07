@@ -10,12 +10,18 @@
 	export let num: number;
 	export let invite: InviteClientData;
 	export let missing: boolean = false;
-	let anyAllergies: boolean = false;
-	let otherAllergies: string;
+
 	// Init list with all possible allergies unchecked
 	let inviteAllergies: Allergy[] = allergies.map((allergy) => {
-		return { ...allergy, checked: false };
+		if (invite.allergies && invite.allergies.includes(allergy.accessor)) {
+			return { ...allergy, checked: true };
+		} else {
+			return { ...allergy, checked: false };
+		}
 	});
+
+	let anyAllergies: boolean = invite.allergies && invite.allergies.length > 0 ? true : false;
+	let otherAllergies: string = invite.otherAllergies || '';
 
 	$: if (invite.allergies?.includes('other') && otherAllergies !== undefined) {
 		invite.otherAllergies = otherAllergies;
