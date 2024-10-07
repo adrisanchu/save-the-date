@@ -57,6 +57,7 @@ export type SurveyClientData = {
 export type Survey = SurveyClientData & {
 	id?: string;
 	createdAt: Timestamp; // Firestore timestamp
+	modifiedAt?: Timestamp; // Firestore timestamp
 };
 
 export type LegalDetails = {

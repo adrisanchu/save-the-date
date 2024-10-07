@@ -44,15 +44,17 @@
 	let anyAllergies: boolean = false;
 	let otherAllergies: string = '';
 
-	async function handleUpdate(event: { currentTarget: EventTarget & HTMLFormElement }) {
+	const handleUpdate = async (event: { currentTarget: EventTarget & HTMLFormElement }) => {
 		form.loading = true;
-		const data = new FormData(event.currentTarget);
-		form.name = data.get('name');
-		form.surname = data.get('surname');
-		form.email = data.get('email');
+		if (!survey || !mainInvite) {
+			console.error('Something went wrong! Unable to update!');
+			form.missing = true;
+			form.loading = false;
+			return;
+		}
 
 		// Check for mandatory props
-		if (!form.name || !form.surname) {
+		if (!mainInvite.name || !mainInvite.surname) {
 			console.error('Missing fields!');
 			form.missing = true;
 			form.loading = false;
@@ -70,25 +72,11 @@
 			return;
 		}
 
-		// Build main user data
-		const user: User = {
-			id: crypto.randomUUID(),
-			name: form.name,
-			surname: form.surname,
-			email: form.email
-		};
-
 		// Keep only selected allergies
 		const selectedAllergies = userAllergies.filter((allergy) => allergy.checked);
 		const allergiesStored = selectedAllergies.map((allergy) => {
 			return allergy.accessor;
 		});
-
-		// Add main user as an invite as well
-		const mainInvite: Invite = {
-			...user,
-			type: 'main'
-		};
 
 		// If other allergies...
 		if (allergiesStored.includes('other')) {
@@ -129,71 +117,85 @@
 		// (avoid client manipulation)
 		const allInvites: InviteClientData[] = [...invites, mainInvite];
 
-		// Build Survey Doc to be stored
-		const surveyDoc: SurveyClientData = {
-			createdBy: user,
+		// Build Survey Doc to be updated
+		const surveyDoc: Survey = {
+			...survey,
 			invites: allInvites.map((invite) => invite.id)
 		};
 
 		// Clean up inviteBusOptions depending on if there is a return bus or not
 		const busOpts: BusOptions | BusOptionsWithReturn =
-			mainInvite.bus.busReturn === false
+			mainInvite.bus && mainInvite.bus.busReturn === false
 				? { busGo: inviteBusOptions.busGo, busReturn: inviteBusOptions.busReturn }
 				: { ...inviteBusOptions };
 
 		// Convert invites client data into valid invites to store in DB
-		const invitesDocs: Invite[] = allInvites.map((invite) => {
-			if (mainInvite.assistance) {
-				return {
-					...invite,
-					surveyId: surveyId,
-					assistance: mainInvite.assistance,
-					bus: busOpts
-				};
-			} else {
-				return {
-					...invite,
-					surveyId: surveyId,
-					assistance: mainInvite.assistance
-				};
-			}
-		});
-
-		// Store into DB, in batch mode
-		try {
-			// Start batch
-			const batch = writeBatch(db);
-
-			// Add survey
-			const surveyRef = doc(db, 'surveys', surveyId);
-			const surveyStored: Survey = {
-				...surveyDoc,
-				createdAt: serverTimestamp() as Timestamp
-			};
-			batch.set(surveyRef, surveyStored);
-
-			// Add all invites
-			invitesDocs.forEach((invite) => {
-				const inviteRef = doc(db, 'invites', invite.id);
-				batch.set(inviteRef, invite);
+		if (survey && survey.id) {
+			const invitesDocs: Invite[] = allInvites.map((invite) => {
+				if (mainInvite.assistance) {
+					return {
+						...invite,
+						surveyId: survey.id || '',
+						assistance: mainInvite.assistance,
+						bus: busOpts
+					};
+				} else {
+					return {
+						...invite,
+						surveyId: survey.id || '',
+						assistance: mainInvite.assistance
+					};
+				}
 			});
 
-			// Execute batch
-			await batch.commit();
+			// Store into DB, in batch mode
+			try {
+				// Start batch
+				const batch = writeBatch(db);
 
-			// store locally a reference to the survey
-			surveys.set([...$surveys, surveyId]);
+				// Get and update survey
+				const surveyRef = doc(db, 'surveys', survey.id || '');
+				const docSnap = await getDoc(surveyRef);
 
-			// display confirmation message
-			showConfirmationModal(surveyRef.id);
+				if (docSnap.exists()) {
+					const surveyStored: Survey = {
+						...surveyDoc,
+						modifiedAt: serverTimestamp() as Timestamp
+					};
+					batch.set(surveyRef, surveyStored);
 
-			// show some confetti when form is submitted
-			form.success = true;
-		} catch (e) {
-			console.error('Error adding document: ', e);
+					// Add all invites
+					invitesDocs.forEach((invite) => {
+						const inviteRef = doc(db, 'invites', invite.id);
+						batch.set(inviteRef, invite);
+					});
+
+					// Execute batch
+					await batch.commit();
+
+					// store locally a reference to the survey
+					if (survey.id && !$surveys.includes(survey.id)) {
+						surveys.set([...$surveys, survey.id]);
+					}
+					// display confirmation message
+					// showConfirmationModal(surveyRef.id);
+
+					// show some confetti when form is submitted
+					form.success = true;
+				} else {
+					console.error('Unable to find current survey! Impossible to update');
+				}
+			} catch (e) {
+				console.error('Error adding document: ', e);
+			}
+		} else {
+			console.error('No survey found!');
+			form.missing = true;
+			form.loading = false;
+			return;
 		}
 		form.loading = false;
-	}
+	};
 
 	function handleAllergyCheck(id: string) {
 		userAllergies = userAllergies.map((allergy) => {
@@ -208,9 +210,6 @@
 	let userAllergies: Allergy[] = allergies.map((allergy) => {
 		return { ...allergy, checked: false };
 	});
-
-	// Init survey id to be referenced later on
-	const surveyId: string = crypto.randomUUID();
 
 	// Init bus options for all the invites
 	const inviteBusOptions: BusOptionsWithReturn = {
@@ -227,7 +226,9 @@
 				id: uuid,
 				type: 'couple',
 				name: '',
-				surname: ''
+				surname: '',
+				surveyId: survey.id || crypto.randomUUID(),
+				assistance: false
 			}
 		];
 	}
@@ -380,12 +381,12 @@
 						name="name"
 						class="input"
 						autocomplete="given-name"
-						class:input-error={form?.missing && !form.name}
+						class:input-error={form?.missing && !mainInvite.name}
 						type="text"
 						placeholder="Juan"
-						value={mainInvite?.name}
+						bind:value={mainInvite.name}
 					/>
-					{#if form?.missing && !form.name}
+					{#if form?.missing && !mainInvite.name}
 						<p class="text-xs text-error-500">Nombre obligatorio</p>
 					{/if}
 				</label>
@@ -397,12 +398,12 @@
 						name="surname"
 						class="input"
 						autocomplete="family-name"
-						class:input-error={form?.missing && !form.surname}
+						class:input-error={form?.missing && !mainInvite.surname}
 						type="text"
 						placeholder="Cuesta"
-						value={mainInvite.surname}
+						bind:value={mainInvite.surname}
 					/>
-					{#if form?.missing && !form.surname}
+					{#if form?.missing && !mainInvite.surname}
 						<p class="text-xs text-error-500">Apellido/s obligatorios</p>
 					{/if}
 				</label>
@@ -416,7 +417,7 @@
 						type="email"
 						placeholder="juancuesta@example.com"
 						autocomplete="email"
-						value={mainInvite.email}
+						bind:value={mainInvite.email}
 					/>
 				</label>
 				<!-- confirm -->
