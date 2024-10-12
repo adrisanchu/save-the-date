@@ -2,7 +2,7 @@
 	import { base } from '$app/paths';
 	import { popup, clipboard } from '@skeletonlabs/skeleton';
 	import type { PopupSettings } from '@skeletonlabs/skeleton';
-	import { Clipboard, ClipboardCheck, SquarePen, Eye } from 'lucide-svelte';
+	import { Clipboard, ClipboardCheck, SquarePen, Eye, Trash } from 'lucide-svelte';
 	import type { Survey } from '$lib/types';
 
 	export let survey: Survey;
@@ -56,20 +56,6 @@
 				day: 'numeric'
 			})}
 		</p>
-		<div class="ml-2 space-x-2">
-			<a
-				href="{base}/form/edit/?id={survey.id}"
-				class="variant-filled btn-icon btn-icon-sm h-8 w-8 font-bold"
-			>
-				<SquarePen size={16} />
-			</a>
-			<a
-				href="{base}/form/view/?id={survey.id}"
-				class="variant-filled btn-icon btn-icon-sm h-8 w-8 font-bold"
-			>
-				<Eye size={16} />
-			</a>
-		</div>
 	</div>
 	<div class="flex flex-col">
 		<span>Creado por:</span>
@@ -90,4 +76,18 @@
 			<p class="font-semibold text-surface-900">+{survey.invites.length - 1}</p>
 		</div>
 	{/if}
+	<div class="flex">
+		<a href="{base}/form/view/?id={survey.id}" class="variant-filled btn btn-sm mr-2 font-bold">
+			<span>Ver</span><Eye size={16} />
+		</a>
+		<a
+			href="{base}/form/edit/?id={survey.id}"
+			class="variant-filled-secondary btn btn-sm mr-2 font-bold"
+		>
+			<span>Editar</span><SquarePen size={16} />
+		</a>
+		<button class="variant-filled-error btn btn-sm ml-auto font-bold">
+			<span>Borrar</span><Trash size={16} />
+		</button>
+	</div>
 </section>
