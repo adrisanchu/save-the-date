@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { base } from '$app/paths';
+	import { goto } from '$app/navigation';
 	import { Undo2 } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { db } from '$lib/db/firebase';
+	import FullScreenConfetti from '$lib/components/FullScreenConfetti.svelte';
 	import { doc, getDoc, writeBatch, serverTimestamp } from 'firebase/firestore';
-	import { base } from '$app/paths';
 	import { sleepTrigger } from '$lib/utils/sleepFunc';
 	import type {
 		Survey,
@@ -15,15 +17,46 @@
 	} from '$lib/types';
 	import Placeholder from '$lib/components/Placeholder.svelte';
 	import BoolSelector from '$lib/components/BoolSelector.svelte';
-
 	import { slide } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
 	import { allergies } from '$lib/utils/allergiesList';
 	import InviteCard from '$lib/components/InviteCard.svelte';
 	import type { Timestamp } from 'firebase/firestore';
-	import { ProgressRadial } from '@skeletonlabs/skeleton';
+	import { getModalStore, ProgressRadial } from '@skeletonlabs/skeleton';
+	import type { ModalSettings } from '@skeletonlabs/skeleton';
 	import surveys from '$lib/stores/surveys';
 	import { TriangleAlert } from 'lucide-svelte';
+
+	// handle modal pop-up
+	const modalStore = getModalStore();
+
+	/**
+	 * Display a modal after form submission
+	 * @param id
+	 */
+	function showConfirmationModal(id: string) {
+		const modal: ModalSettings = {
+			type: 'alert',
+			title: '¡Formulario actualizado!',
+			buttonTextCancel: '¡Entendido!',
+			body: `<div class="flex flex-col">
+				<p>¡Pues ya estaría! De parte de Isa y Adri, muchas gracias por tu colaboración :) <br />
+				Si quieres cambiar el formulario en el futuro, este es tu código: </p>
+				<div class="my-2 flex justify-center items-center variant-soft chip">
+					<span class="font-semibold">${id}</span>
+				</div>
+				<div>
+					<p class="text-sm italic">(No te preocupes! Este código se guardará en este dispositivo automáticamente)</p>
+				</div>
+			</div>
+			`,
+			response: (r: boolean) => {
+				// Navigate to main page
+				goto(`${base}/form`);
+			}
+		};
+		modalStore.trigger(modal);
+	}
 
 	// If you've come this far...this must be true
 	let terms: boolean = true;
@@ -185,7 +218,7 @@
 						surveys.set([...$surveys, survey.id]);
 					}
 					// display confirmation message
-					// showConfirmationModal(surveyRef.id);
+					showConfirmationModal(surveyRef.id);
 
 					// show some confetti when form is submitted
 					form.success = true;
@@ -338,6 +371,9 @@
 	});
 </script>
 
+{#if form.success}
+	<FullScreenConfetti />
+{/if}
 <div class="flex flex-col">
 	<div class="mb-4 ml-6 flex justify-between pt-20">
 		<h2 id="form" class="h2">
