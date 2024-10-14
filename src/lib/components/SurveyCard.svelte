@@ -76,7 +76,7 @@
 			<p class="font-semibold text-surface-900">+{survey.invites.length - 1}</p>
 		</div>
 	{/if}
-	<div class="flex">
+	<div class="flex justify-center space-x-6">
 		<a href="{base}/form/view/?id={survey.id}" class="variant-filled btn btn-sm mr-2 font-bold">
 			<span>Ver</span><Eye size={16} />
 		</a>
@@ -86,8 +86,8 @@
 		>
 			<span>Editar</span><SquarePen size={16} />
 		</a>
-		<button class="variant-filled-error btn btn-sm ml-auto font-bold">
+		<!-- <button class="variant-filled-error btn btn-sm ml-auto font-bold">
 			<span>Borrar</span><Trash size={16} />
-		</button>
+		</button> -->
 	</div>
 </section>
