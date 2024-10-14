@@ -6,8 +6,6 @@
 	import { base } from '$app/paths';
 	import { sleepTrigger } from '$lib/utils/sleepFunc';
 	import type {
-		User,
-		SurveyClientData,
 		Survey,
 		Allergy,
 		InviteClientData,
@@ -154,7 +152,7 @@
 				const batch = writeBatch(db);
 
 				// Get and update survey
-				const surveyRef = doc(db, 'surveys', survey.id || '');
+				const surveyRef = doc(db, 'surveys', survey.id);
 				const docSnap = await getDoc(surveyRef);
 
 				if (docSnap.exists()) {
@@ -162,12 +160,21 @@
 						...surveyDoc,
 						modifiedAt: serverTimestamp() as Timestamp
 					};
-					batch.set(surveyRef, surveyStored);
+					batch.update(surveyRef, surveyStored);
 
 					// Add all invites
 					invitesDocs.forEach((invite) => {
 						const inviteRef = doc(db, 'invites', invite.id);
 						batch.set(inviteRef, invite);
+					});
+
+					// In case an invite was deleted...
+					docSnap.data().invites.forEach((inviteId: string) => {
+						if (!surveyDoc.invites.includes(inviteId)) {
+							// Delete old invite from DB
+							const inviteRef = doc(db, 'invites', inviteId);
+							batch.delete(inviteRef);
+						}
 					});
 
 					// Execute batch
