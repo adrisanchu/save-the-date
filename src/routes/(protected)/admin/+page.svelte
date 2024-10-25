@@ -2,10 +2,9 @@
 	import { user } from '$lib/stores/auth';
 	import { auth } from '$lib/db/firebase';
 	import { signOut } from 'firebase/auth';
+	import { getInvites } from '$lib/db/api';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { db } from '$lib/db/firebase';
-	import { collection, getDocs } from 'firebase/firestore';
 	import { sleepTrigger } from '$lib/utils/sleepFunc';
 	import Placeholder from '$lib/components/Placeholder.svelte';
 	import InviteStats from '$lib/components/InviteStats.svelte';
@@ -21,18 +20,6 @@
 		await signOut(auth);
 		goto('/login');
 	}
-
-	/**
-	 * Get all invites from firestore
-	 */
-	const getInvites = async () => {
-		const querySnapshot = await getDocs(collection(db, 'invites'));
-		const docs: Invite[] = [];
-		querySnapshot.forEach((doc) => {
-			docs.push(doc.data() as Invite);
-		});
-		return docs;
-	};
 
 	const fetchData = async () => {
 		sleepTrigger(2000).then(() => {

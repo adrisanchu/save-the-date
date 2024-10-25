@@ -4,6 +4,7 @@
 	import { Undo2 } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { db } from '$lib/db/firebase';
+	import { getSurvey, getInvite } from '$lib/db/api';
 	import FullScreenConfetti from '$lib/components/FullScreenConfetti.svelte';
 	import { doc, getDoc, writeBatch, serverTimestamp } from 'firebase/firestore';
 	import { sleepTrigger } from '$lib/utils/sleepFunc';
@@ -280,34 +281,10 @@
 		}
 	}
 
-	const getInvite = async (id: string) => {
-		const docSnap = await getDoc(doc(db, 'invites', id));
-		if (docSnap.exists()) {
-			return docSnap.data() as Invite;
-		} else {
-			// docSnap.data() will be undefined in this case
-			console.error('No invite found for id: ', id);
-			throw new Error(`The document with id: "${id}" does not exist!`);
-		}
-	};
-
-	const getSurvey = async () => {
-		const formId = new URLSearchParams(window.location.search).get('id') || '';
-		const docRef = doc(db, 'surveys', formId);
-		const docSnap = await getDoc(docRef);
-
-		if (docSnap.exists()) {
-			// add id to firestore object
-			return { ...docSnap.data(), id: formId } as Survey;
-		} else {
-			// docSnap.data() will be undefined in this case
-			throw new Error(`The document with id: "${formId}" does not exist!`);
-		}
-	};
-
 	const fetchData = async () => {
 		sleepTrigger(2500).then(() => {
-			getSurvey()
+			const formId = new URLSearchParams(window.location.search).get('id') || '';
+			getSurvey(formId)
 				.then((data) => {
 					console.log('Promise resolved!');
 					console.log('Data: ', data);
