@@ -151,7 +151,14 @@
 
 		// Build Survey Doc to be updated
 		const surveyDoc: Survey = {
-			...survey,
+			createdBy: {
+				id: survey.id || crypto.randomUUID(), // the id doesn't change
+				// these props could have changed from the original survey
+				name: mainInvite.name,
+				surname: mainInvite.surname,
+				email: mainInvite.email
+			},
+			createdAt: survey.createdAt,
 			invites: allInvites.map((invite) => invite.id)
 		};
 
