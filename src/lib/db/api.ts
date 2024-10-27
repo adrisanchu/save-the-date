@@ -1,5 +1,5 @@
 import { db } from '$lib/db/firebase';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, writeBatch } from 'firebase/firestore';
 import type { Survey, Invite } from '$lib/types';
 
 /**
@@ -33,6 +33,19 @@ export const getInvite = async (id: string): Promise<Invite> => {
 };
 
 /**
+ * Gets all surveys from the firestore
+ * @returns {Promise<Survey[]>} A promise resolving with an array of Survey objects
+ */
+export const getSurveys = async (): Promise<Survey[]> => {
+	const querySnapshot = await getDocs(collection(db, 'surveys'));
+	const docs: Survey[] = [];
+	querySnapshot.forEach((doc) => {
+		docs.push({ ...doc.data(), id: doc.id } as Survey);
+	});
+	return docs;
+};
+
+/**
  * Gets a survey from firestore
  * @param id The survey id
  * @throws {Error} if the survey does not exist
@@ -45,5 +58,36 @@ export const getSurvey = async (id: string): Promise<Survey> => {
 		return { ...surveySnapshot.data(), id } as Survey;
 	} else {
 		throw new Error(`The document with id: "${id}" does not exist!`);
+	}
+};
+
+/**
+ * Deletes a survey from firestore along with its invites
+ * @param id The survey id
+ * @throws {Error} if the survey does not exist
+ * @returns {Promise<void>} A promise resolving when the deletion is complete
+ */
+export const deleteSurvey = async (id: string): Promise<void> => {
+	// Start batch
+	const batch = writeBatch(db);
+	const surveyRef = doc(db, 'surveys', id);
+	// Get the current survey
+	const docSnap = await getDoc(surveyRef);
+
+	if (docSnap.exists()) {
+		// If any invites exist, delete them
+		if (docSnap.data().invites && docSnap.data().invites.length > 0) {
+			docSnap.data().invites.forEach((inviteId: string) => {
+				const inviteRef = doc(db, 'invites', inviteId);
+				batch.delete(inviteRef);
+			});
+		}
+		// Delete the survey after the invites
+		batch.delete(surveyRef);
+
+		// Execute batch
+		return batch.commit();
+	} else {
+		throw new Error(`The survey with id: "${id}" does not exist!`);
 	}
 };
