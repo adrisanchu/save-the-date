@@ -1,6 +1,21 @@
 import type { Timestamp } from 'firebase/firestore';
 
 /**
+ * Possible check statuses
+ */
+type CheckStatus = 'pending' | 'accepted' | 'to review';
+
+/**
+ * Whether something was checked by an admin
+ */
+export type Checked = {
+	by: string; // admin id
+	at: Timestamp; // Firestore timestamp
+	status: CheckStatus;
+	comment?: string; // admin comment
+};
+
+/**
  * Basic User information
  */
 export type User = {
@@ -58,6 +73,7 @@ export type Survey = SurveyClientData & {
 	id?: string;
 	createdAt: Timestamp; // Firestore timestamp
 	modifiedAt?: Timestamp; // Firestore timestamp
+	checked?: Checked; // whether the survey was checked by an admin
 };
 
 export type LegalDetails = {
