@@ -1,8 +1,9 @@
 <script lang="ts">
+	import { user } from '$lib/stores/auth';
 	import { base } from '$app/paths';
 	import { popup, clipboard } from '@skeletonlabs/skeleton';
 	import type { PopupSettings } from '@skeletonlabs/skeleton';
-	import { Clipboard, ClipboardCheck, SquarePen, Eye, Trash } from 'lucide-svelte';
+	import { Clipboard, ClipboardCheck, SquarePen, Eye, Tag } from 'lucide-svelte';
 	import type { Survey } from '$lib/types';
 
 	export let survey: Survey;
@@ -20,6 +21,10 @@
 		setTimeout(() => {
 			valueCopied = false;
 		}, 3000);
+	}
+
+	function handleClassify(): void {
+		console.log('classify me!');
 	}
 </script>
 
@@ -86,6 +91,13 @@
 		>
 			<span>Editar</span><SquarePen size={16} />
 		</a>
+		{#if $user}
+			<div class="flex justify-between space-x-6">
+				<button on:click={handleClassify} class="variant-filled-tertiary btn btn-sm mr-2 font-bold">
+					<span>Clasificar</span><Tag size={16} />
+				</button>
+			</div>
+		{/if}
 		<!-- <button class="variant-filled-error btn btn-sm ml-auto font-bold">
 			<span>Borrar</span><Trash size={16} />
 		</button> -->
