@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { Chart } from 'chart.js/auto';
 	import type { ChartEvent } from 'chart.js';
-	import type { Invite } from '$lib/types';
+	import type { Invite, Survey } from '$lib/types';
 	import { getColor } from '$lib/utils/colors';
 	import { getModalStore } from '@skeletonlabs/skeleton';
 	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
@@ -18,6 +18,7 @@
 	const modalStore = getModalStore();
 
 	export let invites: Invite[];
+	export let surveys: Survey[];
 
 	let inviteTypes: { [key: string]: number } = {};
 	let inviteBuses: { [key: string]: Invite[] } = {};
@@ -222,7 +223,7 @@
 		<div class="card">
 			<h2 class="card-header">Núm. Formularios</h2>
 			<div class="align-items mb-4 flex justify-center">
-				<span class="text-2xl">{'??'}</span>
+				<span class="text-2xl">{surveys.length}</span>
 			</div>
 		</div>
 	</div>
