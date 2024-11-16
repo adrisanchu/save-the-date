@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { user } from '$lib/stores/auth';
+	import { updateSurvey } from '$lib/db/api';
 	import { serverTimestamp } from 'firebase/firestore';
 	import type { Survey } from '$lib/types';
 	import type { Timestamp } from 'firebase/firestore';
@@ -37,6 +38,8 @@
 			at: serverTimestamp() as Timestamp,
 			status: 'accepted'
 		};
+
+		updateSurvey(survey);
 		console.log('reviewed!', survey);
 
 		// Move the survey from the pending to the reviewed list
@@ -59,7 +62,7 @@
 					<ul>
 						{#each pending as survey, i (survey.id)}
 							<li class="p-1 transition duration-200 ease-in-out">
-								<SurveyCard {survey} />
+								<SurveyCard {survey} on:classify={() => handleSurveyClick(survey)} />
 								{#if i !== pending.length - 1}
 									<hr class="mt-4 !border-t-2" />
 								{/if}
@@ -81,12 +84,12 @@
 				>
 				<svelte:fragment slot="content">
 					<ul>
-						{#each toReview as survey (survey.id)}
-							<li class="invite-item hover:variant-filled">
-								<button on:click={() => handleSurveyClick(survey)}>
-									{survey.createdBy.name}
-									{survey.createdBy.surname}
-								</button>
+						{#each toReview as survey, i (survey.id)}
+							<li class="p-1 transition duration-200 ease-in-out">
+								<SurveyCard {survey} />
+								{#if i !== pending.length - 1}
+									<hr class="mt-4 !border-t-2" />
+								{/if}
 							</li>
 						{/each}
 					</ul>
@@ -103,12 +106,12 @@
 				</svelte:fragment>
 				<svelte:fragment slot="content">
 					<ul>
-						{#each accepted as survey (survey.id)}
-							<li class="invite-item hover:variant-filled">
-								<button on:click={() => handleSurveyClick(survey)}>
-									{survey.createdBy.name}
-									{survey.createdBy.surname}
-								</button>
+						{#each accepted as survey, i (survey.id)}
+							<li class="p-1 transition duration-200 ease-in-out">
+								<SurveyCard {survey} />
+								{#if i !== pending.length - 1}
+									<hr class="mt-4 !border-t-2" />
+								{/if}
 							</li>
 						{/each}
 					</ul>

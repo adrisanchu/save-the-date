@@ -5,6 +5,9 @@
 	import type { PopupSettings } from '@skeletonlabs/skeleton';
 	import { Clipboard, ClipboardCheck, SquarePen, Eye, Tag } from 'lucide-svelte';
 	import type { Survey } from '$lib/types';
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
 	export let survey: Survey;
 
@@ -25,6 +28,7 @@
 
 	function handleClassify(): void {
 		console.log('classify me!');
+		dispatch('classify', { status: 'accepted' });
 	}
 </script>
 
@@ -81,7 +85,7 @@
 			<p class="font-semibold text-surface-900">+{survey.invites.length - 1}</p>
 		</div>
 	{/if}
-	<div class="flex justify-center space-x-6">
+	<div class="flex justify-center">
 		<a href="{base}/form/view/?id={survey.id}" class="variant-filled btn btn-sm mr-2 font-bold">
 			<span>Ver</span><Eye size={16} />
 		</a>
@@ -92,7 +96,7 @@
 			<span>Editar</span><SquarePen size={16} />
 		</a>
 		{#if $user}
-			<div class="flex justify-between space-x-6">
+			<div>
 				<button on:click={handleClassify} class="variant-filled-tertiary btn btn-sm mr-2 font-bold">
 					<span>Clasificar</span><Tag size={16} />
 				</button>
