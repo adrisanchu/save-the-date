@@ -1,5 +1,13 @@
 import { db } from '$lib/db/firebase';
-import { collection, doc, getDoc, getDocs, writeBatch } from 'firebase/firestore';
+import {
+	collection,
+	doc,
+	getDoc,
+	getDocs,
+	writeBatch,
+	updateDoc,
+	serverTimestamp
+} from 'firebase/firestore';
 import type { Survey, Invite } from '$lib/types';
 
 /**
@@ -90,4 +98,22 @@ export const deleteSurvey = async (id: string): Promise<void> => {
 	} else {
 		throw new Error(`The survey with id: "${id}" does not exist!`);
 	}
+};
+
+/**
+ * Updates a survey in firestore
+ * @param survey The survey object with updated data
+ * @throws {Error} if the survey id is undefined
+ * @returns {Promise<void>} A promise resolving when the update is complete
+ */
+export const updateSurvey = async (survey: Survey): Promise<void> => {
+	if (survey.id === undefined) {
+		throw new Error('Survey id is undefined');
+	}
+	const surveyRef = doc(db, 'surveys', survey.id);
+
+	await updateDoc(surveyRef, {
+		...survey,
+		modifiedAt: serverTimestamp()
+	});
 };
