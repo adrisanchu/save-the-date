@@ -8,6 +8,7 @@
 	import { sleepTrigger } from '$lib/utils/sleepFunc';
 	import Placeholder from '$lib/components/Placeholder.svelte';
 	import InviteStats from '$lib/components/InviteStats.svelte';
+	import InvitesView from '$lib/components/InvitesView.svelte';
 	import SurveyChecklist from '$lib/components/SurveyChecklist.svelte';
 	import type { Invite, Survey } from '$lib/types';
 	import { Tab, TabGroup } from '@skeletonlabs/skeleton';
@@ -67,11 +68,14 @@
 						<span>Estadísticas</span>
 					</Tab>
 					<Tab bind:group={tabSet} name="tab2" value={1}>Revisión</Tab>
+					<Tab bind:group={tabSet} name="tab3" value={2}>Alergias</Tab>
 					<svelte:fragment slot="panel">
 						{#if tabSet === 0}
 							<InviteStats {invites} {surveys} />
 						{:else if tabSet === 1}
 							<SurveyChecklist {surveys} />
+						{:else if tabSet === 2}
+							<InvitesView {invites} />
 						{/if}
 					</svelte:fragment>
 				</TabGroup>
